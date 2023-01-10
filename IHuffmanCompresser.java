@@ -8,7 +8,7 @@ public interface IHuffmanCompresser {
 
     void createHuffmanTree();
 
-    void generateHuffmanCode();
+    void generatePrefixCode();
 
     void calculateCharacterFrequency(String filePath);
 

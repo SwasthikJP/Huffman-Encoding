@@ -9,8 +9,8 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
     Node rootNode;
 
     public FrequencyBasedHuffmanCompresser(){
-        characterFrequency=new int[256];
-        huffmanCode=new String[256];
+        characterFrequency=new int[257];
+        huffmanCode=new String[257];
         rootNode=null;
     }
 
@@ -21,6 +21,7 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
         while((character=inputStream.getBits(8))!=-1){
             characterFrequency[character]++;
         }
+        characterFrequency[256]=1;
     }
 
 
@@ -32,7 +33,6 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
             pq.add(new Node(a,b));
         }
         rootNode=pq.poll();
-        System.out.println(rootNode.frequency); 
     }
 
     @Override
@@ -60,7 +60,6 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
         }
         if(node.isLeafNode){
             huffmanCode[node.value]=code;
-            System.out.println((char)node.value+" : "+code);
         }else{
             preOrder(node.left, code+"0");
             preOrder(node.right, code+"1");
@@ -68,7 +67,7 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
     }
 
     @Override
-    public void generateHuffmanCode() {
+    public void generatePrefixCode() {
         preOrder(rootNode, "");
     }
 
@@ -78,8 +77,8 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
         while((character=inputStream.getBits(8))!=-1){
             outputStream.writeBits(huffmanCode[character], huffmanCode[character].length());
         }
-
-    }
+       outputStream.writeBits(huffmanCode[256], huffmanCode[256].length());
+    } 
 
     @Override
     public String encodeFile(String filePath) {

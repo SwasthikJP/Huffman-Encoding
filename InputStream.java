@@ -35,7 +35,6 @@ public class InputStream {
         if(buffer==-1){
             return -1;
         }
-    //    System.out.println("getbit buffer "+buffer);
         int bit=buffer>>7;
         bufferSize--;
         buffer=(buffer<<1)&255;
@@ -43,7 +42,6 @@ public class InputStream {
         if(bufferSize==0){
         loadBuffer();  
         }
-        // System.out.println("hi -- "+bit);
         return bit;
     }
 
@@ -57,7 +55,6 @@ public class InputStream {
             tempByte=(tempByte<<1)+bit;
             length--;
         }
-    //    System.out.println("getbit buffer "+tempByte);
 
         return tempByte;
     }

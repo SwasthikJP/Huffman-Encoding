@@ -1,8 +1,8 @@
 
 public interface IHuffmanDecompresser {
 
-    void createHuffmanTree(String compressFilepath);
+    void createHuffmanTree();
 
-    String decodeFile(String compressFilepath);
+    String decodeFile(String filePath);
 
 }

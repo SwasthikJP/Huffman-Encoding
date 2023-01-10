@@ -8,11 +8,9 @@ public class PreorderHeaderInfoWriter implements IHeaderInfoWriter {
          }
          if(node.isLeafNode){
             outputStream.writeBit(1);
-            System.out.println(1+"   "+(char)node.value+"  | ");
-            outputStream.writeBits(node.value, 8);
+            outputStream.writeBits(node.value, 9);
          }else{
             outputStream.writeBit(0);
-            System.out.println(0+" | ");
          writeHeaderInfo(node.left, outputStream);
          writeHeaderInfo( node.right,outputStream);
          }

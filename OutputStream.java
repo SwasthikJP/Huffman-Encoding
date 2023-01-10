@@ -21,7 +21,6 @@ public class OutputStream {
     public void flushBuffer() {
         try{
         if(bufferSize==8){
-            System.out.println("done it output "+buffer);
             fileOutputStream.write(buffer);
             buffer=0;
             bufferSize=0;
@@ -57,7 +56,6 @@ public class OutputStream {
     }
 
     public void closeStream(){
-        System.out.println("this is in buffer"+buffer);
         if(bufferSize!=0){
             writeBits(0, 8-bufferSize);
 
