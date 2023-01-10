@@ -19,6 +19,7 @@ public class PreorderBasedAssignCode implements AssignCode {
         }
         if(root.isLeafNode){
             codeList[root.value]=code;
+            System.out.println((char)root.value+" : "+code);
         }else{
             PreOrder(root.left, code+"0");
             PreOrder(root.right, code+"1");

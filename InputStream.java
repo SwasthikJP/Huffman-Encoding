@@ -6,22 +6,32 @@ public class InputStream {
     int buffer;
     int bufferSize;
     FileInputStream fileInputStream;
+  
 
-    public InputStream(String fileName) throws IOException{
+    public InputStream(String fileName){
+        try{
         fileInputStream=new FileInputStream(fileName);
+        }catch(IOException exception){
+            exception.printStackTrace();
+        }
         bufferSize=0;
         buffer=0;
         loadBuffer();
     }
 
-    public void loadBuffer() throws IOException{
+    public void loadBuffer() {
+    try{
         if(bufferSize==0){
            buffer=fileInputStream.read();
            bufferSize=8;
         }
     }
+    catch(IOException exception){
+       exception.printStackTrace();
+    }
+}
 
-    public int getBit() throws IOException{
+    public int getBit(){
         if(buffer==-1){
             return -1;
         }
@@ -37,7 +47,7 @@ public class InputStream {
         return bit;
     }
 
-    public int getBits(int length) throws IOException{
+    public int getBits(int length) {
         int tempByte=0;
         while(length!=0){
             int bit=getBit();
