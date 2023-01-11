@@ -2,22 +2,37 @@ public class HuffmanCompressionApp implements ICompressionApp {
 
     @Override
     public String compress(String filePath) {
+
+        ICompressionStats compressionStats=new FileCompressionStats();
+        compressionStats.startTimer();
+
         IHuffmanCompresser huffmanCompresser = new FrequencyBasedHuffmanCompresser();
         huffmanCompresser.calculateCharacterFrequency(filePath);
         huffmanCompresser.createHuffmanTree();
         huffmanCompresser.generatePrefixCode();
-        String compressFile = huffmanCompresser.encodeFile(filePath);
+        String compressFilePath = huffmanCompresser.encodeFile(filePath);
 
-        return compressFile;
+        compressionStats.stopTimer();
+        compressionStats.displayCompressionStats(filePath,compressFilePath);
+
+        return compressFilePath;
     }
 
     @Override
     public String decompress(String compressFilepath) {
+
+        ICompressionStats compressionStats=new FileCompressionStats();
+        compressionStats.startTimer();
+        
         IHuffmanDecompresser huffmanDecompresser = new FrequencyBasedHuffmanDecompresser(compressFilepath);
         huffmanDecompresser.createHuffmanTree();
-        String decompressFile = huffmanDecompresser.decodeFile(compressFilepath);
-        return decompressFile;
-        // return null;
+        String decompressFilepath = huffmanDecompresser.decodeFile(compressFilepath);
+
+        compressionStats.stopTimer();
+        compressionStats.displayDecompressionStats(compressFilepath,decompressFilepath);
+
+        return decompressFilepath;
+       
     }
 
 }
