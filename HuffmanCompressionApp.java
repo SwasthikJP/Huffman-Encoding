@@ -3,7 +3,7 @@ public class HuffmanCompressionApp implements ICompressionApp {
     @Override
     public String compress(String filePath) {
 
-        ICompressionStats compressionStats=new FileCompressionStats();
+        ICompressionStats compressionStats = new FileCompressionStats();
         compressionStats.startTimer();
         IHuffmanCompresser huffmanCompresser = new FrequencyBasedHuffmanCompresser();
         huffmanCompresser.calculateCharacterFrequency(filePath);
@@ -11,8 +11,8 @@ public class HuffmanCompressionApp implements ICompressionApp {
         huffmanCompresser.generatePrefixCode();
         String compressFilePath = huffmanCompresser.encodeFile(filePath);
         compressionStats.stopTimer();
-        compressionStats.displayCompressionStats(filePath,compressFilePath);
-        
+        compressionStats.displayCompressionStats(filePath, compressFilePath);
+        System.out.println("Compressed file path is " + compressFilePath);
 
         return compressFilePath;
     }
@@ -20,18 +20,20 @@ public class HuffmanCompressionApp implements ICompressionApp {
     @Override
     public String decompress(String compressFilepath) {
 
-        ICompressionStats compressionStats=new FileCompressionStats();
+        ICompressionStats compressionStats = new FileCompressionStats();
         compressionStats.startTimer();
-        
+
         IHuffmanDecompresser huffmanDecompresser = new FrequencyBasedHuffmanDecompresser(compressFilepath);
         huffmanDecompresser.createHuffmanTree();
         String decompressFilepath = huffmanDecompresser.decodeFile(compressFilepath);
 
         compressionStats.stopTimer();
-        compressionStats.displayDecompressionStats(compressFilepath,decompressFilepath);
+        compressionStats.displayDecompressionStats(compressFilepath, decompressFilepath);
+
+        System.out.println("Decompressed file path is " + decompressFilepath);
 
         return decompressFilepath;
-       
+
     }
 
 }

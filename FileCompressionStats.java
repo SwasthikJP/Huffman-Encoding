@@ -20,7 +20,7 @@ public class FileCompressionStats implements ICompressionStats {
     public void displayCompressionStats(String inputFilePath, String compressedFilePath) {
 
         Duration duration = Duration.ofNanos(elapsedTime);
-        System.out.println("compression: "+duration.toMillis());
+        System.out.println("compression: " + duration.toMillis());
         System.out.println("\r \nTime taken for compression: " + duration.toHoursPart() + " : "
                 + duration.toMinutesPart() + " : " + duration.toSecondsPart() + " : " + duration.toMillisPart());
 
@@ -37,13 +37,13 @@ public class FileCompressionStats implements ICompressionStats {
     public void displayDecompressionStats(String compressedFilePath, String decompressedFilePath) {
 
         Duration duration = Duration.ofNanos(elapsedTime);
-        System.out.println("decompression: "+duration.toMillis());
+        System.out.println("decompression: " + duration.toMillis());
         System.out.println("\r \n Time taken for decompression: " + duration.toHoursPart() + " : "
                 + duration.toMinutesPart() + " : " + duration.toSecondsPart() + " : " + duration.toMillisPart());
 
         File compressedFile = new File(compressedFilePath);
         File decompressedFile = new File(decompressedFilePath);
-        
+
         if (compressedFile.exists() && decompressedFile.exists()) {
             System.out.println("Compressed File Size: " + compressedFile.length() + " bytes");
             System.out.println("Decompressed File Size: " + decompressedFile.length() + " bytes\n ");

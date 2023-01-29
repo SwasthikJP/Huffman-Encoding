@@ -9,5 +9,4 @@ public interface ICompressionStats {
 
     void displayCompressionStats(String filePath, String compressFile);
 
-
 }

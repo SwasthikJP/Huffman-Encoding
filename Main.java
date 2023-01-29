@@ -7,19 +7,44 @@ public class Main {
 
     public static void main(String[] args) {
 
+        int choice;
         Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Enter the file path for compression");
-        String filePath = scanner.nextLine();
-
         ICompressionApp iApp = new HuffmanCompressionApp();
-        
-        String compressFilepath = iApp.compress(filePath);
-        System.out.println("Compressed file path is " + compressFilepath);
+        String filePath;
 
-        String decompressFilepath = iApp.decompress(compressFilepath);
-        System.out.println("Decompressed file path is " + decompressFilepath);
+        while (true) {
+            System.out.println("1.Compress a file\n2.Decompress a file\n3.Exit");
+            System.out.println("Enter your choice: ");
 
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+
+                    System.out.println("Enter the file path for compression");
+                    filePath = scanner.next();
+                    iApp.compress(filePath);
+
+                    break;
+
+                case 2:
+                    System.out.println("Enter the file path for compression");
+                    filePath = scanner.next();
+                    iApp.decompress(filePath);
+                    break;
+
+                case 3:
+                    break;
+
+                default:
+                    System.out.println("Invalid Input");
+                    break;
+            }
+            if (choice == 3) {
+                break;
+            }
+
+        }
         // InputStream inputStream=new InputStream("tt.txt");
         // System.out.println(inputStream.getByte());
 

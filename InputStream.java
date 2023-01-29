@@ -10,12 +10,15 @@ public class InputStream {
 
     public InputStream(String fileName) {
         try {
-            fileInputStream = new BufferedInputStream(new FileInputStream(fileName),1000000);
+            fileInputStream = new BufferedInputStream(new FileInputStream(fileName), 1000000);
+            bufferSize = 0;
+            buffer = 0;
         } catch (IOException exception) {
             exception.printStackTrace();
+            buffer = -1;
+            bufferSize = 0;
         }
-        bufferSize = 0;
-        buffer = 0;
+
         // loadBuffer();
     }
 
@@ -59,20 +62,19 @@ public class InputStream {
     }
 
     public int getByte() {
-        try{
-        return fileInputStream.read();
-        }catch(Exception exception){
+        try {
+            return fileInputStream.read();
+        } catch (Exception exception) {
             return -1;
         }
     }
 
-    public void close(){
-        try{
-        fileInputStream.close();
-        }catch(Exception exception){
+    public void close() {
+        try {
+            fileInputStream.close();
+        } catch (Exception exception) {
 
         }
     }
 
-    
 }

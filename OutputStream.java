@@ -54,9 +54,9 @@ public class OutputStream {
         }
     }
 
-    public void writeByte(int bits){
+    public void writeByte(int bits) {
         try {
-                fileOutputStream.write(bits);
+            fileOutputStream.write(bits);
         } catch (IOException exception) {
             exception.printStackTrace();
         }
