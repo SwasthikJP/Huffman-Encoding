@@ -10,6 +10,7 @@ public class FrequencyBasedHuffmanDecompresser implements IHuffmanDecompresser {
 
     public FrequencyBasedHuffmanDecompresser(String compressFilepath) {
         inputStream = new InputStream(compressFilepath);
+        inputStream.loadBuffer();
     }
 
     @Override
@@ -33,7 +34,8 @@ public class FrequencyBasedHuffmanDecompresser implements IHuffmanDecompresser {
                     outputStream.closeStream();
                     return filePath + ".unhuf";
                 }
-                outputStream.writeBits(node.value, 8);
+                // outputStream.writeBits(node.value, 8);
+                outputStream.writeByte(node.value);
                 node = rootNode;
             }
             if (bit == 0) {

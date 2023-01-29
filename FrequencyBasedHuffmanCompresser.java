@@ -18,9 +18,14 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
     public void calculateCharacterFrequency(String filePath) {
         int character;
         InputStream inputStream = new InputStream(filePath);
-        while ((character = inputStream.getBits(8)) != -1) {
+        // while ((character = inputStream.getBits(8)) != -1) {
+        //     characterFrequency[character]++;
+        // }
+        System.out.println("hi");
+        while ((character = inputStream.getByte()) != -1) {
             characterFrequency[character]++;
         }
+        inputStream.close();
         characterFrequency[256] = 1;
     }
 
@@ -73,9 +78,13 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
     public void writeEncodedCharacters(InputStream inputStream, OutputStream outputStream) {
 
         int character;
-        while ((character = inputStream.getBits(8)) != -1) {
+        // while ((character = inputStream.getBits(8)) != -1) {
+        //     outputStream.writeBits(huffmanCode[character], huffmanCode[character].length());
+        // }
+        while ((character = inputStream.getByte()) != -1) {
             outputStream.writeBits(huffmanCode[character], huffmanCode[character].length());
         }
+        
         outputStream.writeBits(huffmanCode[256], huffmanCode[256].length());
     }
 
@@ -88,6 +97,7 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
         headerInfoWriter.writeHeaderInfo(rootNode, outputStream);
 
         writeEncodedCharacters(inputStream, outputStream);
+        inputStream.close();
         outputStream.closeStream();
         return filePath + ".huf";
     }

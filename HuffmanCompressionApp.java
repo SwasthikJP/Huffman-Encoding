@@ -5,15 +5,14 @@ public class HuffmanCompressionApp implements ICompressionApp {
 
         ICompressionStats compressionStats=new FileCompressionStats();
         compressionStats.startTimer();
-
         IHuffmanCompresser huffmanCompresser = new FrequencyBasedHuffmanCompresser();
         huffmanCompresser.calculateCharacterFrequency(filePath);
         huffmanCompresser.createHuffmanTree();
         huffmanCompresser.generatePrefixCode();
         String compressFilePath = huffmanCompresser.encodeFile(filePath);
-
         compressionStats.stopTimer();
         compressionStats.displayCompressionStats(filePath,compressFilePath);
+        
 
         return compressFilePath;
     }

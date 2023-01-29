@@ -20,5 +20,8 @@ public class Main {
         String decompressFilepath = iApp.decompress(compressFilepath);
         System.out.println("Decompressed file path is " + decompressFilepath);
 
+        // InputStream inputStream=new InputStream("tt.txt");
+        // System.out.println(inputStream.getByte());
+
     }
 }

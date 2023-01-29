@@ -1,3 +1,4 @@
+import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -5,17 +6,17 @@ public class InputStream {
 
     int buffer;
     int bufferSize;
-    FileInputStream fileInputStream;
+    BufferedInputStream fileInputStream;
 
     public InputStream(String fileName) {
         try {
-            fileInputStream = new FileInputStream(fileName);
+            fileInputStream = new BufferedInputStream(new FileInputStream(fileName),1000000);
         } catch (IOException exception) {
             exception.printStackTrace();
         }
         bufferSize = 0;
         buffer = 0;
-        loadBuffer();
+        // loadBuffer();
     }
 
     public void loadBuffer() {
@@ -56,4 +57,22 @@ public class InputStream {
 
         return tempByte;
     }
+
+    public int getByte() {
+        try{
+        return fileInputStream.read();
+        }catch(Exception exception){
+            return -1;
+        }
+    }
+
+    public void close(){
+        try{
+        fileInputStream.close();
+        }catch(Exception exception){
+
+        }
+    }
+
+    
 }

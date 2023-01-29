@@ -1,3 +1,4 @@
+import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -5,11 +6,11 @@ public class OutputStream {
 
     int buffer;
     int bufferSize;
-    FileOutputStream fileOutputStream;
+    BufferedOutputStream fileOutputStream;
 
     public OutputStream(String fileName) {
         try {
-            fileOutputStream = new FileOutputStream(fileName);
+            fileOutputStream = new BufferedOutputStream(new FileOutputStream(fileName), 100000);
         } catch (IOException exception) {
             exception.printStackTrace();
         }
@@ -50,6 +51,14 @@ public class OutputStream {
         for (int i = 0; i < length; i++) {
             int bit = (bits.charAt(i)) - '0';
             writeBit(bit);
+        }
+    }
+
+    public void writeByte(int bits){
+        try {
+                fileOutputStream.write(bits);
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
     }
 
