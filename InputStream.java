@@ -73,7 +73,7 @@ public class InputStream {
         try {
             fileInputStream.close();
         } catch (Exception exception) {
-
+            System.out.println("Error occured while closing");
         }
     }
 
