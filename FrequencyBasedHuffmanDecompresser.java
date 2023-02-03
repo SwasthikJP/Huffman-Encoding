@@ -24,7 +24,9 @@ public class FrequencyBasedHuffmanDecompresser implements IHuffmanDecompresser {
         if (inputStream == null) {
             return null;
         }
-        OutputStream outputStream = new OutputStream(filePath + ".unhuf");
+        String[] filePathSplit=filePath.split("\\.(?![^\\.]+$)");
+        String decompressFilePath=filePathSplit[0];
+        OutputStream outputStream = new OutputStream(decompressFilePath + ".unhuf"+".txt");
 
         int bit;
         Node node = rootNode;
@@ -32,7 +34,7 @@ public class FrequencyBasedHuffmanDecompresser implements IHuffmanDecompresser {
             if (node.isLeafNode) {
                 if (node.value == 256) {
                     outputStream.closeStream();
-                    return filePath + ".unhuf";
+                    return decompressFilePath + ".unhuf"+".txt";
                 }
                 // outputStream.writeBits(node.value, 8);
                 outputStream.writeByte(node.value);

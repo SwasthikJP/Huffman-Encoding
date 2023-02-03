@@ -28,7 +28,7 @@ public class Main {
                     break;
 
                 case 2:
-                    System.out.println("Enter the file path for compression");
+                    System.out.println("Enter the file path for decompression");
                     filePath = scanner.next();
                     iApp.decompress(filePath);
                     break;

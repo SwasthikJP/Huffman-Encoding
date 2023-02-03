@@ -97,7 +97,9 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
     public String encodeFile(String filePath) {
         InputStream inputStream = new InputStream(filePath);
         // if(inputStream.)
-        OutputStream outputStream = new OutputStream(filePath + ".huf");
+        String[] filePathSplit=filePath.split("\\.(?=[^\\.]+$)");
+        String compressFilePath=filePathSplit[0];
+        OutputStream outputStream = new OutputStream(compressFilePath + ".huf"+".txt");
 
         IHeaderInfoWriter headerInfoWriter = new PreorderHeaderInfoWriter();
         headerInfoWriter.writeHeaderInfo(rootNode, outputStream);
@@ -105,7 +107,7 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
         writeEncodedCharacters(inputStream, outputStream);
         inputStream.close();
         outputStream.closeStream();
-        return filePath + ".huf";
+        return compressFilePath + ".huf"+".txt";
     }
 
 }
