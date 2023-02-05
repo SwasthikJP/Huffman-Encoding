@@ -1,3 +1,4 @@
+package com.capillary.Compression;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -8,16 +9,16 @@ public class InputStream {
     int bufferSize;
     BufferedInputStream fileInputStream;
 
-    public InputStream(String fileName) {
-        try {
+    public InputStream(String fileName) throws  IOException {
+//        try {
             fileInputStream = new BufferedInputStream(new FileInputStream(fileName), 1000000);
             bufferSize = 0;
             buffer = 0;
-        } catch (IOException exception) {
-            exception.printStackTrace();
-            buffer = -1;
-            bufferSize = 0;
-        }
+//        } catch (IOException exception) {
+//            exception.printStackTrace();
+//            buffer = -1;
+//            bufferSize = 0;
+//        }
 
         // loadBuffer();
     }
@@ -69,12 +70,8 @@ public class InputStream {
         }
     }
 
-    public void close() {
-        try {
+    public void close() throws IOException{
             fileInputStream.close();
-        } catch (Exception exception) {
-            System.out.println("Error occured while closing");
-        }
     }
 
 }

@@ -1,4 +1,4 @@
-
+package com.capillary.Compression;
 public interface ICompressionStats {
 
     void startTimer();
@@ -7,6 +7,6 @@ public interface ICompressionStats {
 
     void displayDecompressionStats(String compressFilepath, String decompressFilepath);
 
-    void displayCompressionStats(String filePath, String compressFile);
+    void displayCompressionStats(String decompressFilePath, String compressFilePath);
 
 }

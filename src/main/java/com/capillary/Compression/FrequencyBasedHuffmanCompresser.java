@@ -1,3 +1,4 @@
+package com.capillary.Compression;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -15,16 +16,9 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
     }
 
     @Override
-    public void calculateCharacterFrequency(String filePath) {
+    public void calculateCharacterFrequency(String filePath) throws  IOException {
         int character;
         InputStream inputStream = new InputStream(filePath);
-        // while ((character = inputStream.getBits(8)) != -1) {
-        // characterFrequency[character]++;
-        // }
-
-        // if(inputStream.getByte()==-1){
-        // return;
-        // }
 
         while ((character = inputStream.getByte()) != -1) {
             characterFrequency[character]++;
@@ -82,10 +76,6 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
     public void writeEncodedCharacters(InputStream inputStream, OutputStream outputStream) {
 
         int character;
-        // while ((character = inputStream.getBits(8)) != -1) {
-        // outputStream.writeBits(huffmanCode[character],
-        // huffmanCode[character].length());
-        // }
         while ((character = inputStream.getByte()) != -1) {
             outputStream.writeBits(huffmanCode[character], huffmanCode[character].length());
         }
@@ -94,15 +84,15 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
     }
 
     @Override
-    public String encodeFile(String filePath) {
+    public String encodeFile(String filePath) throws  IOException {
         InputStream inputStream = new InputStream(filePath);
         // if(inputStream.)
         String[] filePathSplit=filePath.split("\\.(?=[^\\.]+$)");
         String compressFilePath=filePathSplit[0];
         OutputStream outputStream = new OutputStream(compressFilePath + ".huf"+".txt");
 
-        IHeaderInfoWriter headerInfoWriter = new PreorderHeaderInfoWriter();
-        headerInfoWriter.writeHeaderInfo(rootNode, outputStream);
+        IHeaderInfoReaderWriter headerInfoReaderWriter= new PreorderHeaderInfoReaderWriter();
+        headerInfoReaderWriter.writeHeaderInfo(rootNode, outputStream);
 
         writeEncodedCharacters(inputStream, outputStream);
         inputStream.close();

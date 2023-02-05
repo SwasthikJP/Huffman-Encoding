@@ -1,3 +1,6 @@
+package com.capillary.Compression;
+
+import java.io.IOException;
 
 public class FrequencyBasedHuffmanDecompresser implements IHuffmanDecompresser {
 
@@ -8,19 +11,19 @@ public class FrequencyBasedHuffmanDecompresser implements IHuffmanDecompresser {
         inputStream = null;
     }
 
-    public FrequencyBasedHuffmanDecompresser(String compressFilepath) {
+    public FrequencyBasedHuffmanDecompresser(String compressFilepath) throws IOException {
         inputStream = new InputStream(compressFilepath);
         inputStream.loadBuffer();
     }
 
     @Override
     public void createHuffmanTree() {
-        IHeaderInfoReader headerInfoReader = new PreorderHeaderInfoReader();
-        rootNode = headerInfoReader.readHeaderInfo(inputStream);
+        IHeaderInfoReaderWriter headerInfoReaderWriter = new PreorderHeaderInfoReaderWriter();
+        rootNode = headerInfoReaderWriter.readHeaderInfo(inputStream);
     }
 
     @Override
-    public String decodeFile(String filePath) {
+    public String decodeFile(String filePath) throws IOException{
         if (inputStream == null) {
             return null;
         }

@@ -1,3 +1,4 @@
+package com.capillary.Compression;
 public class Node {
     int value;
     int frequency;

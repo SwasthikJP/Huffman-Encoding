@@ -1,3 +1,4 @@
+package com.capillary.Compression;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -45,8 +46,6 @@ public class Main {
             }
 
         }
-        // InputStream inputStream=new InputStream("tt.txt");
-        // System.out.println(inputStream.getByte());
 
     }
 }
