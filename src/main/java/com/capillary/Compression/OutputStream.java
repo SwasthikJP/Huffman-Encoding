@@ -1,5 +1,6 @@
 package com.capillary.Compression;
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -9,12 +10,12 @@ public class OutputStream {
     int bufferSize;
     BufferedOutputStream fileOutputStream;
 
-    public OutputStream(String fileName) {
-        try {
+    public OutputStream(String fileName) throws IOException{
+//        try {
             fileOutputStream = new BufferedOutputStream(new FileOutputStream(fileName), 1000000);
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
+//        } catch (IOException exception) {
+//            exception.printStackTrace();
+//        }
         buffer = 0;
         bufferSize = 0;
     }

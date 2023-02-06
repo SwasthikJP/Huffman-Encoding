@@ -28,6 +28,9 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
     }
 
     public void combineSubTrees(PriorityQueue<Node> pq) {
+        if(pq.size()==0){
+            return;
+        }
         while (pq.size() != 1) {
             Node a = pq.poll();
             Node b = pq.poll();
@@ -70,7 +73,10 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
 
     @Override
     public void generatePrefixCode() {
-        preOrder(rootNode, "");
+        if(rootNode.isLeafNode){
+            huffmanCode[rootNode.value]="0";
+        }else
+          preOrder(rootNode, "");
     }
 
     public void writeEncodedCharacters(InputStream inputStream, OutputStream outputStream) {

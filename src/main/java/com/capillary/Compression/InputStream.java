@@ -1,5 +1,6 @@
 package com.capillary.Compression;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -11,6 +12,12 @@ public class InputStream {
 
     public InputStream(String fileName) throws  IOException {
 //        try {
+            File  file=new File(fileName);
+            if(file.length()==0){
+                    IOException e=new IOException("File is empty");
+                    throw e;
+            }
+
             fileInputStream = new BufferedInputStream(new FileInputStream(fileName), 1000000);
             bufferSize = 0;
             buffer = 0;

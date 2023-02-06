@@ -16,7 +16,11 @@ public class Node {
 
     public Node(Node leftNode, Node rightNode) {
         this.value = -1;
-        this.frequency = leftNode.frequency + rightNode.frequency;
+        if(leftNode!=null && rightNode!=null){
+            this.frequency = leftNode.frequency + rightNode.frequency;
+        }else{
+            this.frequency=0;
+        }
         this.isLeafNode = false;
         this.left = leftNode;
         this.right = rightNode;
