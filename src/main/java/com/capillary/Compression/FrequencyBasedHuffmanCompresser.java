@@ -1,4 +1,5 @@
 package com.capillary.Compression;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -16,9 +17,9 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
     }
 
     @Override
-    public void calculateCharacterFrequency(String filePath) throws  IOException {
+    public void calculateCharacterFrequency(java.io.InputStream fileInputStream) throws  IOException {
         int character;
-        InputStream inputStream = new InputStream(filePath);
+        InputStream inputStream = new InputStream(fileInputStream);
 
         while ((character = inputStream.getByte()) != -1) {
             characterFrequency[character]++;
@@ -73,6 +74,9 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
 
     @Override
     public void generatePrefixCode() {
+        if(rootNode==null){
+            return;
+        }
         if(rootNode.isLeafNode){
             huffmanCode[rootNode.value]="0";
         }else
@@ -90,12 +94,13 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
     }
 
     @Override
-    public String encodeFile(String filePath) throws  IOException {
-        InputStream inputStream = new InputStream(filePath);
+    public String encodeFile(java.io.InputStream fileInputStream,String filePath) throws  IOException {
+        InputStream inputStream = new InputStream(fileInputStream);
         // if(inputStream.)
         String[] filePathSplit=filePath.split("\\.(?=[^\\.]+$)");
         String compressFilePath=filePathSplit[0];
-        OutputStream outputStream = new OutputStream(compressFilePath + ".huf"+".txt");
+        FileOutputStream fileOutputStream=new FileOutputStream(compressFilePath + ".huf"+".txt");
+        OutputStream outputStream = new OutputStream(fileOutputStream);
 
         IHeaderInfoReaderWriter headerInfoReaderWriter= new PreorderHeaderInfoReaderWriter();
         headerInfoReaderWriter.writeHeaderInfo(rootNode, outputStream);

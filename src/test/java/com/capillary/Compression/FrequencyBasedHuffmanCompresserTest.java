@@ -6,8 +6,10 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.*;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -22,7 +24,10 @@ public class FrequencyBasedHuffmanCompresserTest {
     @Test
     public void calculateCharacterFrequency_WhenCharactersASCII_ThenCountShouldMatch() throws IOException {
         frequencyBasedHuffmanCompresser=new FrequencyBasedHuffmanCompresser();
-        frequencyBasedHuffmanCompresser.calculateCharacterFrequency("FrequencyTestNormalAscii.txt");
+        String fileInput="aB 1/a";
+        InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
+                (Charset.forName("UTF-8")));
+        frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream);
         int[] result=new int[257];
         result[97]=2;
         result[66]=1;
@@ -38,7 +43,12 @@ public class FrequencyBasedHuffmanCompresserTest {
     @Test
     public void calculateCharacterFrequency_WhenCharactersUNICODE_ThenCountShouldMatch() throws IOException {
         frequencyBasedHuffmanCompresser=new FrequencyBasedHuffmanCompresser();
-        frequencyBasedHuffmanCompresser.calculateCharacterFrequency("FrequencyTestUnicode.txt");
+        String fileInput="✅♨\uD83D\uDE80";
+        InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
+                (Charset.forName("UTF-8")));
+//        frequencyBasedHuffmanCompresser.calculateCharacterFrequency("FrequencyTestUnicode.txt");
+        frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream);
+
         int[] result=new int[257];
         result[128]=1;
         result[133]=1;
@@ -54,11 +64,6 @@ public class FrequencyBasedHuffmanCompresserTest {
 
     }
 
-    @Test(expected = IOException.class)
-    public void calculateCharacterFrequency_WhenFilePathIncorrect_ThenThrowFileNotFoundException() throws IOException {
-      frequencyBasedHuffmanCompresser=new FrequencyBasedHuffmanCompresser();
-      frequencyBasedHuffmanCompresser.calculateCharacterFrequency("NonExistFile.txt");
-    }
 
     @Rule
     public ExpectedException expectedException=ExpectedException.none();
@@ -67,11 +72,11 @@ public class FrequencyBasedHuffmanCompresserTest {
         expectedException.expect(IOException.class);
         expectedException.expectMessage("File is empty");
         frequencyBasedHuffmanCompresser=new FrequencyBasedHuffmanCompresser();
-        frequencyBasedHuffmanCompresser.calculateCharacterFrequency("test.txt");
+        String fileInput="";
+        InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
+                (Charset.forName("UTF-8")));
+        frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream);
     }
-
-
-
 
 
     Boolean dfs(Node root1, Node root2){
@@ -104,7 +109,10 @@ public class FrequencyBasedHuffmanCompresserTest {
     @Test
     public void createHuffmanTree_WhenNormalCharacters_ThenMatchHuffmanTree() throws IOException{
         frequencyBasedHuffmanCompresser=new FrequencyBasedHuffmanCompresser();
-        frequencyBasedHuffmanCompresser.calculateCharacterFrequency("createHuffmanTreeNormal.txt");
+        String fileInput="aB";
+        InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
+                (Charset.forName("UTF-8")));
+        frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream);
         frequencyBasedHuffmanCompresser.createHuffmanTree();
         Node testRoot=frequencyBasedHuffmanCompresser.rootNode;
         Node l1=new Node(66,1);
@@ -128,7 +136,10 @@ public class FrequencyBasedHuffmanCompresserTest {
     @Test
     public void generatePrefixCode_WhenNormalCharacter_ThenMatchPrefixCode() throws IOException{
         frequencyBasedHuffmanCompresser=new FrequencyBasedHuffmanCompresser();
-        frequencyBasedHuffmanCompresser.calculateCharacterFrequency("createHuffmanTreeNormal.txt");
+        String fileInput="aB";
+        InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
+                (Charset.forName("UTF-8")));
+        frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream);
         frequencyBasedHuffmanCompresser.createHuffmanTree();
         frequencyBasedHuffmanCompresser.generatePrefixCode();
         String[] expectedPrefixCode=new String[257];
@@ -170,20 +181,20 @@ public class FrequencyBasedHuffmanCompresserTest {
     }
 
 
-
-
-//        @Test
-//    public void writeEncodedCharacters() {
-//    }
-
     @Test
     public void encodeFile_WhenNormalCharacters_ThenCompressedFilesMatch() throws IOException{
 
         IHuffmanCompresser huffmanCompresser = new FrequencyBasedHuffmanCompresser();
-        huffmanCompresser.calculateCharacterFrequency("createHuffmanTreeNormal.txt");
+        String fileInput="aB";
+        InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
+                (Charset.forName("UTF-8")));
+        huffmanCompresser.calculateCharacterFrequency(inputStream);
         huffmanCompresser.createHuffmanTree();
         huffmanCompresser.generatePrefixCode();
-       String  compressFilePath = huffmanCompresser.encodeFile("createHuffmanTreeNormal.txt");
+
+        InputStream inputStream2 = new ByteArrayInputStream(fileInput.getBytes
+                (Charset.forName("UTF-8")));
+       String  compressFilePath = huffmanCompresser.encodeFile(inputStream2,"createHuffmanTreeNormal.huf.txt");
        String expectedFilePath="ExpectedcreateHuffmanTreeNormal.huf.txt";
 
            File compressFile=new File(compressFilePath);
@@ -195,4 +206,11 @@ public class FrequencyBasedHuffmanCompresserTest {
            assertTrue(Arrays.equals(compressFileArray,expectedFileArray));
 
     }
-}
+
+//    @Test
+//    public void encodeFile_WhenRootNodeIsNull_ThenCompressedFilesMatch() throws IOException {
+//
+//    }
+
+
+    }

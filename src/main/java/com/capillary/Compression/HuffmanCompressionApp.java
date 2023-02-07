@@ -1,5 +1,6 @@
 package com.capillary.Compression;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -11,11 +12,13 @@ public class HuffmanCompressionApp implements ICompressionApp {
         ICompressionStats compressionStats = new FileCompressionStats();
         compressionStats.startTimer();
         try {
+            FileInputStream fileInputStream=new FileInputStream(filePath);
             IHuffmanCompresser huffmanCompresser = new FrequencyBasedHuffmanCompresser();
-            huffmanCompresser.calculateCharacterFrequency(filePath);
+            huffmanCompresser.calculateCharacterFrequency(fileInputStream);
             huffmanCompresser.createHuffmanTree();
             huffmanCompresser.generatePrefixCode();
-            compressFilePath = huffmanCompresser.encodeFile(filePath);
+            FileInputStream fileInputStream2=new FileInputStream(filePath);
+            compressFilePath = huffmanCompresser.encodeFile(fileInputStream2,filePath);
             compressionStats.stopTimer();
             compressionStats.displayCompressionStats(filePath, compressFilePath);
             System.out.println("Compressed file path is " + compressFilePath);
@@ -38,7 +41,8 @@ public class HuffmanCompressionApp implements ICompressionApp {
         ICompressionStats compressionStats = new FileCompressionStats();
         compressionStats.startTimer();
         try {
-            IHuffmanDecompresser huffmanDecompresser = new FrequencyBasedHuffmanDecompresser(compressFilepath);
+            FileInputStream fileInputStream=new FileInputStream(compressFilepath);
+            IHuffmanDecompresser huffmanDecompresser = new FrequencyBasedHuffmanDecompresser(fileInputStream);
             huffmanDecompresser.createHuffmanTree();
             decompressFilepath = huffmanDecompresser.decodeFile(compressFilepath);
 

@@ -10,9 +10,9 @@ public class OutputStream {
     int bufferSize;
     BufferedOutputStream fileOutputStream;
 
-    public OutputStream(String fileName) throws IOException{
+    public OutputStream(java.io.OutputStream outputStream) throws IOException{
 //        try {
-            fileOutputStream = new BufferedOutputStream(new FileOutputStream(fileName), 1000000);
+            fileOutputStream = new BufferedOutputStream(outputStream, 1000000);
 //        } catch (IOException exception) {
 //            exception.printStackTrace();
 //        }
@@ -69,8 +69,6 @@ public class OutputStream {
             writeBits(0, 8 - bufferSize);
 
         }
-
             fileOutputStream.close();
-
     }
 }
