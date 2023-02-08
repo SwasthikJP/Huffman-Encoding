@@ -93,17 +93,35 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
         outputStream.writeBits(huffmanCode[256], huffmanCode[256].length());
     }
 
+    public void writeHeaderInfo(Node node, OutputStream outputStream) {
+//        if (node == null) {
+//            return;
+//        }
+        if (node.isLeafNode) {
+            outputStream.writeBit(1);
+            outputStream.writeBits(node.value, 9);
+        } else {
+            outputStream.writeBit(0);
+            writeHeaderInfo(node.left, outputStream);
+            writeHeaderInfo(node.right, outputStream);
+        }
+
+    }
+
     @Override
     public String encodeFile(java.io.InputStream fileInputStream,String filePath) throws  IOException {
         InputStream inputStream = new InputStream(fileInputStream);
         // if(inputStream.)
         String[] filePathSplit=filePath.split("\\.(?=[^\\.]+$)");
         String compressFilePath=filePathSplit[0];
+        if(rootNode==null){
+            NullPointerException e=new NullPointerException("Root node is null");
+            throw e;
+        }
         FileOutputStream fileOutputStream=new FileOutputStream(compressFilePath + ".huf"+".txt");
         OutputStream outputStream = new OutputStream(fileOutputStream);
 
-        IHeaderInfoReaderWriter headerInfoReaderWriter= new PreorderHeaderInfoReaderWriter();
-        headerInfoReaderWriter.writeHeaderInfo(rootNode, outputStream);
+        writeHeaderInfo(rootNode, outputStream);
 
         writeEncodedCharacters(inputStream, outputStream);
         inputStream.close();

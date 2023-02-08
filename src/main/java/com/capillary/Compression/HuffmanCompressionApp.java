@@ -24,12 +24,13 @@ public class HuffmanCompressionApp implements ICompressionApp {
             System.out.println("Compressed file path is " + compressFilePath);
         }
         catch (FileNotFoundException e){
-            compressionStats.stopTimer();
             e.printStackTrace();
 
         }
         catch (IOException e){
-            compressionStats.stopTimer();
+            e.printStackTrace();
+        }
+        catch (NullPointerException e){
             e.printStackTrace();
         }
         return compressFilePath;

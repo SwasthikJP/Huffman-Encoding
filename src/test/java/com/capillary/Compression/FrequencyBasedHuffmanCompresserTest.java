@@ -46,7 +46,6 @@ public class FrequencyBasedHuffmanCompresserTest {
         String fileInput="✅♨\uD83D\uDE80";
         InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
                 (Charset.forName("UTF-8")));
-//        frequencyBasedHuffmanCompresser.calculateCharacterFrequency("FrequencyTestUnicode.txt");
         frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream);
 
         int[] result=new int[257];
@@ -194,23 +193,38 @@ public class FrequencyBasedHuffmanCompresserTest {
 
         InputStream inputStream2 = new ByteArrayInputStream(fileInput.getBytes
                 (Charset.forName("UTF-8")));
-       String  compressFilePath = huffmanCompresser.encodeFile(inputStream2,"createHuffmanTreeNormal.huf.txt");
-       String expectedFilePath="ExpectedcreateHuffmanTreeNormal.huf.txt";
+       String  compressFilePath = huffmanCompresser.encodeFile(inputStream2,"createHuffmanTreeNormal.txt");
 
-           File compressFile=new File(compressFilePath);
-           File expectedFile=new File(expectedFilePath);
-
-              assertTrue(compressFile.length()== expectedFile.length());
             byte[] compressFileArray=(new FileInputStream(compressFilePath).readAllBytes());
-            byte[] expectedFileArray=(new FileInputStream(expectedFilePath).readAllBytes());
-           assertTrue(Arrays.equals(compressFileArray,expectedFileArray));
+            byte[] expectedFileArray={76,41,11,0,88};
+        assertTrue(compressFileArray.length==expectedFileArray.length);
+        assertTrue(Arrays.equals(compressFileArray,expectedFileArray));
 
     }
 
-//    @Test
-//    public void encodeFile_WhenRootNodeIsNull_ThenCompressedFilesMatch() throws IOException {
-//
-//    }
+    @Test
+    public void encodeFile_WhenRootNodeIsNull_ThenThrowNullPointerException() throws IOException {
+      expectedException.expect(NullPointerException.class);
+      expectedException.expectMessage("Root node is null");
+        IHuffmanCompresser huffmanCompresser = new FrequencyBasedHuffmanCompresser();
+        String fileInput="aB";
+        InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
+                (Charset.forName("UTF-8")));
+        huffmanCompresser.encodeFile(inputStream,"createHuffmanTreeNormal.huf.txt");
+    }
+
+    @Test
+    public  void encodeFile_WhenFileIsEmpty_ThenThrowIOException() throws IOException{
+        expectedException.expect(IOException.class);
+        expectedException.expectMessage("File is empty");
+        IHuffmanCompresser huffmanCompresser = new FrequencyBasedHuffmanCompresser();
+        String fileInput="";
+        InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
+                (Charset.forName("UTF-8")));
+        huffmanCompresser.encodeFile(inputStream,"createHuffmanTreeNormal.huf.txt");
+    }
+
+
 
 
     }

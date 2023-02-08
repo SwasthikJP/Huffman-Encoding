@@ -1,6 +1,8 @@
 package com.capillary.Compression;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.io.*;
 import java.io.InputStream;
@@ -12,6 +14,9 @@ import static org.junit.Assert.*;
 public class FrequencyBasedHuffmanDecompresserTest {
 
     FrequencyBasedHuffmanDecompresser frequencyBasedHuffmanDecompresser;
+
+    @Rule
+    public ExpectedException expectedException=ExpectedException.none();
 
     Boolean dfs(Node root1, Node root2) {
         if (root1 == null && root2 == null) {
@@ -80,6 +85,17 @@ public class FrequencyBasedHuffmanDecompresserTest {
     }
 
     @Test
+    public void createHuffmanTree_WhenIncorrectHeader_Then() throws IOException {
+        expectedException.expect(IOException.class);
+        expectedException.expectMessage("Incorrect Header");
+        byte[] fileInputByteArray={6,2}; //aB
+        InputStream inputStream = new ByteArrayInputStream(fileInputByteArray);
+
+        frequencyBasedHuffmanDecompresser = new FrequencyBasedHuffmanDecompresser(inputStream);
+        frequencyBasedHuffmanDecompresser.createHuffmanTree();
+    }
+
+        @Test
     public void decodeFile_WhenNormalEncodedFile_ThenDecompressedFileMatch() throws IOException {
 
         String compressedFilepath = "createHuffmanTreeNormal.huf.txt";
@@ -115,5 +131,6 @@ public class FrequencyBasedHuffmanDecompresserTest {
         frequencyBasedHuffmanDecompresser = new FrequencyBasedHuffmanDecompresser(inputStream);
         assertNull(frequencyBasedHuffmanDecompresser.decodeFile(compressedFilePath));
     }
+
 
     }
