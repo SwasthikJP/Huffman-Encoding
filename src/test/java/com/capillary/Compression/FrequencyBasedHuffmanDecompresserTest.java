@@ -98,18 +98,19 @@ public class FrequencyBasedHuffmanDecompresserTest {
         @Test
     public void decodeFile_WhenNormalEncodedFile_ThenDecompressedFileMatch() throws IOException {
 
-        String compressedFilepath = "createHuffmanTreeNormal.huf.txt";
+
         byte[] fileInputByteArray={76,41,11,0,88}; //aB
         InputStream inputStream = new ByteArrayInputStream(fileInputByteArray);
+        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream(1);
 
         frequencyBasedHuffmanDecompresser = new FrequencyBasedHuffmanDecompresser(inputStream);
         frequencyBasedHuffmanDecompresser.createHuffmanTree();
 
-        String decompressedFilePath = frequencyBasedHuffmanDecompresser.decodeFile(compressedFilepath);
+        assertTrue(frequencyBasedHuffmanDecompresser.decodeFile(byteArrayOutputStream));
 
         String decompressedFile="aB";
         byte[] decompressedFileByteArray=decompressedFile.getBytes(Charset.forName("UTF-8"));
-        byte[] compressFileArray = (new FileInputStream(decompressedFilePath).readAllBytes());
+        byte[] compressFileArray = (byteArrayOutputStream.toByteArray());
 
         assertEquals(compressFileArray.length,decompressedFileByteArray.length);
         assertTrue(Arrays.equals(compressFileArray,decompressedFileByteArray));
@@ -117,19 +118,20 @@ public class FrequencyBasedHuffmanDecompresserTest {
 
     @Test
     public void decodeFile_WhenInputStreamIsNull_ThenReturnNull() throws IOException {
-        String compressedFilePath="createHuffmanTreeNormal.huf.txt";
+        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream(1);
         frequencyBasedHuffmanDecompresser = new FrequencyBasedHuffmanDecompresser();
-        assertNull(frequencyBasedHuffmanDecompresser.decodeFile(compressedFilePath));
+        assertFalse(frequencyBasedHuffmanDecompresser.decodeFile(byteArrayOutputStream));
     }
 
     @Test
     public void decodeFile_WhenRootNodeIsNull_ThenReturnNull() throws IOException {
-        String compressedFilePath="createHuffmanTreeNormal.huf.txt";
+
         String fileInput="aB";
         InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
                 (Charset.forName("UTF-8")));
+        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream(1);
         frequencyBasedHuffmanDecompresser = new FrequencyBasedHuffmanDecompresser(inputStream);
-        assertNull(frequencyBasedHuffmanDecompresser.decodeFile(compressedFilePath));
+        assertFalse(frequencyBasedHuffmanDecompresser.decodeFile(byteArrayOutputStream));
     }
 
 

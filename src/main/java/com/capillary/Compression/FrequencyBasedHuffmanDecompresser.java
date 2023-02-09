@@ -17,7 +17,6 @@ public class FrequencyBasedHuffmanDecompresser implements IHuffmanDecompresser {
         inputStream.loadBuffer();
     }
 
-
     public Node readHeaderInfo(InputStream inputStream) throws IOException {
         int bit=inputStream.getBit();
         if(bit==-1){
@@ -41,28 +40,21 @@ public class FrequencyBasedHuffmanDecompresser implements IHuffmanDecompresser {
     }
 
     @Override
-    public String decodeFile(String filePath) throws IOException{
+    public Boolean decodeFile(java.io.OutputStream fileOutputStream) throws IOException{
         if (inputStream == null || rootNode==null) {
-            return null;
+            return false;
         }
-        String[] filePathSplit=filePath.split("\\.(?![^\\.]+$)");
-        String decompressFilePath=filePathSplit[0];
-        FileOutputStream fileOutputStream=new FileOutputStream(decompressFilePath + ".unhuf"+".txt");
-        OutputStream outputStream = new OutputStream(fileOutputStream);
+       OutputStream outputStream = new OutputStream(fileOutputStream);
 
         int bit;
         Node node = rootNode;
         while ((bit = inputStream.getBit()) != -1) {
 
-            if(node==null){
-                IOException e=new IOException("Incorrect Header");
-                throw e;
-            }
+
             if (node.isLeafNode) {
                 if (node.value == 256) {
                     outputStream.closeStream();
-                    System.out.println("hello");
-                    return decompressFilePath + ".unhuf"+".txt";
+                    return true;
                 }
                 // outputStream.writeBits(node.value, 8);
                 outputStream.writeByte(node.value);
@@ -74,7 +66,7 @@ public class FrequencyBasedHuffmanDecompresser implements IHuffmanDecompresser {
                 node = node.right;
             }
         }
-        return null;
+        return false;
     }
 
 }

@@ -11,28 +11,22 @@ public class OutputStream {
     BufferedOutputStream fileOutputStream;
 
     public OutputStream(java.io.OutputStream outputStream) throws IOException{
-//        try {
-            fileOutputStream = new BufferedOutputStream(outputStream, 1000000);
-//        } catch (IOException exception) {
-//            exception.printStackTrace();
-//        }
+        fileOutputStream = new BufferedOutputStream(outputStream, 1000000);
         buffer = 0;
         bufferSize = 0;
     }
 
-    public void flushBuffer() {
-        try {
+    public void flushBuffer() throws IOException{
+
             if (bufferSize == 8) {
                 fileOutputStream.write(buffer);
                 buffer = 0;
                 bufferSize = 0;
             }
-        } catch (IOException exception) {
-            exception.printStackTrace();
         }
-    }
 
-    public void writeBit(int bit) {
+
+    public void writeBit(int bit) throws IOException{
         buffer = (buffer << 1) + bit;
         bufferSize++;
         if (bufferSize == 8) {
@@ -40,7 +34,10 @@ public class OutputStream {
         }
     }
 
-    public void writeBits(int bits, int length) {
+    public void writeBits(int bits, int length) throws IOException{
+        if(length<0){
+            throw new IOException("Negative Length");
+        }
         while (length != 0) {
             int bit = bits >> (length - 1);
             length--;
@@ -49,19 +46,15 @@ public class OutputStream {
         }
     }
 
-    public void writeBits(String bits, int length) {
+    public void writeBits(String bits, int length) throws IOException{
         for (int i = 0; i < length; i++) {
             int bit = (bits.charAt(i)) - '0';
             writeBit(bit);
         }
     }
 
-    public void writeByte(int bits) {
-        try {
+    public void writeByte(int bits) throws IOException{
             fileOutputStream.write(bits);
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
     }
 
     public void closeStream() throws IOException {

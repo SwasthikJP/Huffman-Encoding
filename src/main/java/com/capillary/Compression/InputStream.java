@@ -9,12 +9,6 @@ public class InputStream {
 
     public InputStream(java.io.InputStream inputStream) throws  IOException {
 
-//            File  file=new File(fileName);
-//            if(file.length()==0){
-//                    IOException e=new IOException("File is empty");
-//                    throw e;
-//            }
-
              if(inputStream.available()==0){
                  IOException e=new IOException("File is empty");
                     throw e;
@@ -25,22 +19,23 @@ public class InputStream {
             bufferSize = 0;
             buffer = 0;
 
-
         // loadBuffer();
     }
 
-    public void loadBuffer() {
+    public void loadBuffer() throws  IOException{
         try {
             if (bufferSize == 0) {
                 buffer = fileInputStream.read();
                 bufferSize = 8;
             }
-        } catch (IOException exception) {
-            exception.printStackTrace();
+        } catch (IOException e) {
+            IOException exception = new IOException ("InputStream is closed");
+            exception.setStackTrace(e.getStackTrace());
+            throw exception;
         }
     }
 
-    public int getBit() {
+    public int getBit() throws IOException{
         if (buffer == -1) {
             return -1;
         }
@@ -54,7 +49,7 @@ public class InputStream {
         return bit;
     }
 
-    public int getBits(int length) {
+    public int getBits(int length) throws IOException{
         int tempByte = 0;
         while (length != 0) {
             int bit = getBit();
@@ -68,11 +63,13 @@ public class InputStream {
         return tempByte;
     }
 
-    public int getByte() {
+    public int getByte() throws IOException{
         try {
             return fileInputStream.read();
-        } catch (Exception exception) {
-            return -1;
+        } catch (Exception e) {
+            IOException exception = new IOException ("InputStream is closed");
+            exception.setStackTrace(e.getStackTrace());
+            throw exception;
         }
     }
 

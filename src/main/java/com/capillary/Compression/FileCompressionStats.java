@@ -7,6 +7,11 @@ public class FileCompressionStats implements ICompressionStats {
     long startTime;
     long elapsedTime;
 
+    public FileCompressionStats(){
+        startTime=0;
+        elapsedTime=0;
+    }
+
     @Override
     public void startTimer() {
         startTime = System.nanoTime();

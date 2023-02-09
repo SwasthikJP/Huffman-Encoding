@@ -83,7 +83,7 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
           preOrder(rootNode, "");
     }
 
-    public void writeEncodedCharacters(InputStream inputStream, OutputStream outputStream) {
+    public void writeEncodedCharacters(InputStream inputStream, OutputStream outputStream)throws IOException {
 
         int character;
         while ((character = inputStream.getByte()) != -1) {
@@ -93,7 +93,7 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
         outputStream.writeBits(huffmanCode[256], huffmanCode[256].length());
     }
 
-    public void writeHeaderInfo(Node node, OutputStream outputStream) {
+    public void writeHeaderInfo(Node node, OutputStream outputStream) throws IOException{
 //        if (node == null) {
 //            return;
 //        }
@@ -109,16 +109,15 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
     }
 
     @Override
-    public String encodeFile(java.io.InputStream fileInputStream,String filePath) throws  IOException {
+    public Boolean encodeFile(java.io.InputStream fileInputStream, java.io.OutputStream fileOutputStream) throws  IOException {
         InputStream inputStream = new InputStream(fileInputStream);
         // if(inputStream.)
-        String[] filePathSplit=filePath.split("\\.(?=[^\\.]+$)");
-        String compressFilePath=filePathSplit[0];
+
         if(rootNode==null){
             NullPointerException e=new NullPointerException("Root node is null");
             throw e;
         }
-        FileOutputStream fileOutputStream=new FileOutputStream(compressFilePath + ".huf"+".txt");
+//        FileOutputStream fileOutputStream=new FileOutputStream(compressFilePath + ".huf"+".txt");
         OutputStream outputStream = new OutputStream(fileOutputStream);
 
         writeHeaderInfo(rootNode, outputStream);
@@ -126,7 +125,7 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
         writeEncodedCharacters(inputStream, outputStream);
         inputStream.close();
         outputStream.closeStream();
-        return compressFilePath + ".huf"+".txt";
+        return true;
     }
 
 }

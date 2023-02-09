@@ -193,9 +193,10 @@ public class FrequencyBasedHuffmanCompresserTest {
 
         InputStream inputStream2 = new ByteArrayInputStream(fileInput.getBytes
                 (Charset.forName("UTF-8")));
-       String  compressFilePath = huffmanCompresser.encodeFile(inputStream2,"createHuffmanTreeNormal.txt");
+        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream(1);
+       assertTrue(huffmanCompresser.encodeFile(inputStream2,byteArrayOutputStream));
 
-            byte[] compressFileArray=(new FileInputStream(compressFilePath).readAllBytes());
+            byte[] compressFileArray=byteArrayOutputStream.toByteArray();
             byte[] expectedFileArray={76,41,11,0,88};
         assertTrue(compressFileArray.length==expectedFileArray.length);
         assertTrue(Arrays.equals(compressFileArray,expectedFileArray));
@@ -210,7 +211,8 @@ public class FrequencyBasedHuffmanCompresserTest {
         String fileInput="aB";
         InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
                 (Charset.forName("UTF-8")));
-        huffmanCompresser.encodeFile(inputStream,"createHuffmanTreeNormal.huf.txt");
+        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream(1);
+        huffmanCompresser.encodeFile(inputStream,byteArrayOutputStream);
     }
 
     @Test
@@ -221,7 +223,8 @@ public class FrequencyBasedHuffmanCompresserTest {
         String fileInput="";
         InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
                 (Charset.forName("UTF-8")));
-        huffmanCompresser.encodeFile(inputStream,"createHuffmanTreeNormal.huf.txt");
+        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream(1);
+        huffmanCompresser.encodeFile(inputStream,byteArrayOutputStream);
     }
 
 

@@ -1,10 +1,11 @@
 package com.capillary.Compression;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 public interface IHuffmanCompresser {
 
-    String encodeFile(InputStream inputStream,String filePath) throws IOException;
+    Boolean encodeFile(InputStream inputStream, OutputStream outputStream) throws IOException;
 
     void createHuffmanTree();
 

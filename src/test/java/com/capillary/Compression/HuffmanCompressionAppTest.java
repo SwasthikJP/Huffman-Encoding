@@ -23,6 +23,8 @@ public class HuffmanCompressionAppTest {
         InputStream inputStream=new FileInputStream(compressedFilepath);
         byte[] compressedByteArray=inputStream.readAllBytes();
         assertArrayEquals(expectedByteArray,compressedByteArray);
+        File file=new File(compressedFilepath);
+        file.delete();
     }
 
 //    @Test(expected = FileNotFoundException.class)
@@ -35,16 +37,26 @@ public class HuffmanCompressionAppTest {
 
     @Test
     public void decompress_WhenNormalFile_ThenMatchFileContent() throws IOException {
+        File file=new File("createHuffmanTreeNormal.huf.txt");
+        FileOutputStream fileOutputStream=new FileOutputStream(file);
+        byte[] fileInputByteArray={76,41,11,0,88};
+        fileOutputStream.write(fileInputByteArray);
+//        fileOutputStream.close();
 
         huffmanCompressionApp=new HuffmanCompressionApp();
         String decompressedFilePath= huffmanCompressionApp.decompress("createHuffmanTreeNormal.huf.txt");
-        String decompressedFile="aB";
+        String decompressedFileContent="aB";
 
-        byte[] expectedFileContent=decompressedFile.getBytes(Charset.forName("UTF-8"));
-        byte[] resultantFileContent = (new FileInputStream(decompressedFilePath).readAllBytes());
+        File decompresedTestFile=new File(decompressedFilePath);
+
+        byte[] expectedFileContent=decompressedFileContent.getBytes(Charset.forName("UTF-8"));
+        byte[] resultantFileContent = (new FileInputStream(decompresedTestFile).readAllBytes());
 
         assertEquals(expectedFileContent.length,resultantFileContent.length);
         assertTrue(Arrays.equals(expectedFileContent,resultantFileContent));
+
+        file.delete();
+        decompresedTestFile.delete();
     }
 
 }
