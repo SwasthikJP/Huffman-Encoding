@@ -23,13 +23,15 @@ public class FileCompressionStats implements ICompressionStats {
     }
 
     @Override
-    public void displayCompressionStats(String inputFilePath, String compressedFilePath) {
+    public void displayCompressionStats(String inputFilePath, String compressedFilePath) throws NullPointerException,SecurityException{
 
         Duration duration = Duration.ofNanos(elapsedTime);
-//        System.out.println("compression: " + duration.toMillis());
+
+        System.out.println("Compressed file path is " + compressedFilePath);
+
         System.out.println("\r \nTime taken for compression: " + duration.toHoursPart() + " : "
                 + duration.toMinutesPart() + " : " + duration.toSecondsPart() + " : " + duration.toMillisPart());
-       try {
+
            File originalfile = new File(inputFilePath);
            File compressedFile = new File(compressedFilePath);
 
@@ -37,23 +39,20 @@ public class FileCompressionStats implements ICompressionStats {
                System.out.println("Original File Size: " + originalfile.length() + " bytes");
                System.out.println("Compressed File Size: " + compressedFile.length() + " bytes\n");
            }
-       }catch (NullPointerException e){
-           e.printStackTrace();
-       }
-       catch (SecurityException e){
-           e.printStackTrace();
-       }
+
     }
 
     @Override
-    public void displayDecompressionStats(String compressedFilePath, String decompressedFilePath) {
+    public void displayDecompressionStats(String compressedFilePath, String decompressedFilePath)throws NullPointerException,SecurityException {
 
         Duration duration = Duration.ofNanos(elapsedTime);
-//        System.out.println("decompression: " + duration.toMillis());
+
+        System.out.println("Decompressed file path is " + decompressedFilePath);
+
         System.out.println("\r \n Time taken for decompression: " + duration.toHoursPart() + " : "
                 + duration.toMinutesPart() + " : " + duration.toSecondsPart() + " : " + duration.toMillisPart());
 
-        try {
+
             File compressedFile = new File(compressedFilePath);
             File decompressedFile = new File(decompressedFilePath);
 
@@ -62,12 +61,7 @@ public class FileCompressionStats implements ICompressionStats {
                 System.out.println("Decompressed File Size: " + decompressedFile.length() + " bytes\n ");
             }
 
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
-        catch (SecurityException e){
-            e.printStackTrace();
-        }
+
     }
 
 }

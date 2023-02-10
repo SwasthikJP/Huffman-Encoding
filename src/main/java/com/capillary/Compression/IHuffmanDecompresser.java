@@ -1,12 +1,13 @@
 package com.capillary.Compression;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 public interface IHuffmanDecompresser {
 
-    void createHuffmanTree() throws IOException;
+    Node createHuffmanTree(InputStream inputStream) throws IOException;
 
-    Boolean decodeFile(OutputStream outputStream) throws IOException;
+    Boolean decodeFile(OutputStream outputStream, Node rootNode) throws IOException;
 
 }

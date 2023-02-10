@@ -8,10 +8,12 @@ public class InputStream {
     BufferedInputStream fileInputStream;
 
     public InputStream(java.io.InputStream inputStream) throws  IOException {
+             if(inputStream==null){
+                 throw  new NullPointerException("inputStream is null");
+             }
 
              if(inputStream.available()==0){
-                 IOException e=new IOException("File is empty");
-                    throw e;
+                 throw new IOException("File is empty");
              }
 
             fileInputStream = new BufferedInputStream(inputStream, 1000000);
@@ -19,7 +21,6 @@ public class InputStream {
             bufferSize = 0;
             buffer = 0;
 
-        // loadBuffer();
     }
 
     public void loadBuffer() throws  IOException{

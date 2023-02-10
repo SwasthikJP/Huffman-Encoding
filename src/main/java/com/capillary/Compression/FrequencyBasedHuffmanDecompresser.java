@@ -1,28 +1,16 @@
 package com.capillary.Compression;
-
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class FrequencyBasedHuffmanDecompresser implements IHuffmanDecompresser {
 
-    Node rootNode;
-    InputStream inputStream;
 
-    public FrequencyBasedHuffmanDecompresser() {
-        inputStream = null;
-    }
+   private InputStream inputStream;
 
-    public FrequencyBasedHuffmanDecompresser(java.io.InputStream fileInputStream) throws IOException {
-        inputStream = new InputStream(fileInputStream);
-        inputStream.loadBuffer();
-    }
 
-    public Node readHeaderInfo(InputStream inputStream) throws IOException {
+    private Node readHeaderInfo(InputStream inputStream) throws IOException {
         int bit=inputStream.getBit();
         if(bit==-1){
-//            System.out.println("file ended");
-            IOException e=new IOException("Incorrect Header");
-            throw e;
+            throw new IOException("Incorrect Header");
         }
 
         if (bit == 0) {
@@ -32,15 +20,15 @@ public class FrequencyBasedHuffmanDecompresser implements IHuffmanDecompresser {
     }
 
     @Override
-    public void createHuffmanTree() throws IOException{
-        if (inputStream == null) {
-            return ;
-        }
-        rootNode = readHeaderInfo(inputStream);
+    public Node createHuffmanTree(java.io.InputStream fileInputStream) throws IOException{
+        inputStream = new InputStream(fileInputStream);
+        inputStream.loadBuffer();
+        return readHeaderInfo(inputStream);
     }
 
     @Override
-    public Boolean decodeFile(java.io.OutputStream fileOutputStream) throws IOException{
+    public Boolean decodeFile( java.io.OutputStream fileOutputStream, Node rootNode) throws IOException{
+
         if (inputStream == null || rootNode==null) {
             return false;
         }
@@ -56,7 +44,6 @@ public class FrequencyBasedHuffmanDecompresser implements IHuffmanDecompresser {
                     outputStream.closeStream();
                     return true;
                 }
-                // outputStream.writeBits(node.value, 8);
                 outputStream.writeByte(node.value);
                 node = rootNode;
             }

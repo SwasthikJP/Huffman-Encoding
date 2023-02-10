@@ -5,12 +5,12 @@ import java.io.OutputStream;
 
 public interface IHuffmanCompresser {
 
-    Boolean encodeFile(InputStream inputStream, OutputStream outputStream) throws IOException;
+    Boolean encodeFile(InputStream inputStream, OutputStream outputStream, String[] hashCode,Node rootNode) throws IOException;
 
-    void createHuffmanTree();
+    Node createHuffmanTree(int[] frequencyMap);
 
-    void generatePrefixCode();
+    String[] generatePrefixCode(Node rootNode);
 
-    void calculateCharacterFrequency(InputStream inputStream) throws IOException;
+    int[] calculateCharacterFrequency(InputStream inputStream) throws IOException;
 
 }

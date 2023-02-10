@@ -1,7 +1,5 @@
 package com.capillary.Compression;
 import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class OutputStream {
@@ -10,7 +8,7 @@ public class OutputStream {
     int bufferSize;
     BufferedOutputStream fileOutputStream;
 
-    public OutputStream(java.io.OutputStream outputStream) throws IOException{
+    public OutputStream(java.io.OutputStream outputStream){
         fileOutputStream = new BufferedOutputStream(outputStream, 1000000);
         buffer = 0;
         bufferSize = 0;

@@ -27,7 +27,7 @@ public class FrequencyBasedHuffmanCompresserTest {
         String fileInput="aB 1/a";
         InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
                 (Charset.forName("UTF-8")));
-        frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream);
+
         int[] result=new int[257];
         result[97]=2;
         result[66]=1;
@@ -36,7 +36,7 @@ public class FrequencyBasedHuffmanCompresserTest {
         result[47]=1;
         result[256]=1;
 
-        assertArrayEquals(result, frequencyBasedHuffmanCompresser.characterFrequency);
+        assertArrayEquals(result, frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream));
 
     }
 
@@ -46,7 +46,7 @@ public class FrequencyBasedHuffmanCompresserTest {
         String fileInput="✅♨\uD83D\uDE80";
         InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
                 (Charset.forName("UTF-8")));
-        frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream);
+
 
         int[] result=new int[257];
         result[128]=1;
@@ -59,7 +59,7 @@ public class FrequencyBasedHuffmanCompresserTest {
         result[226]=2;
         result[240]=1;
         result[256]=1;
-        assertArrayEquals(result, frequencyBasedHuffmanCompresser.characterFrequency);
+        assertArrayEquals(result, frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream));
 
     }
 
@@ -112,21 +112,25 @@ public class FrequencyBasedHuffmanCompresserTest {
         InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
                 (Charset.forName("UTF-8")));
         frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream);
-        frequencyBasedHuffmanCompresser.createHuffmanTree();
-        Node testRoot=frequencyBasedHuffmanCompresser.rootNode;
+        int[] characterFrequency=new int[257];
+        characterFrequency[97]=1;
+        characterFrequency[66]=1;
+        characterFrequency[256]=1;
+
         Node l1=new Node(66,1);
         Node l2=new Node(97,1);
         Node l3=new Node(256,1);
         Node p1=new Node(l1,l3);
         Node expectedRoot=new Node(l2,p1);
-        assertEquals(true, dfs(expectedRoot, testRoot));
+        assertEquals(true, dfs(expectedRoot, frequencyBasedHuffmanCompresser.createHuffmanTree(characterFrequency)));
     }
 
     @Test
     public void createHuffmanTree_WhenFrequencyMapIsEmpty_ThenRootNodeIsNull() throws IOException{
         frequencyBasedHuffmanCompresser=new FrequencyBasedHuffmanCompresser();
-        frequencyBasedHuffmanCompresser.createHuffmanTree();
-        assertEquals(null,frequencyBasedHuffmanCompresser.rootNode);
+        int[] characterFrequency=new int[257];
+
+        assertEquals(null,frequencyBasedHuffmanCompresser.createHuffmanTree(characterFrequency));
 
     }
 
@@ -138,45 +142,44 @@ public class FrequencyBasedHuffmanCompresserTest {
         String fileInput="aB";
         InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
                 (Charset.forName("UTF-8")));
-        frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream);
-        frequencyBasedHuffmanCompresser.createHuffmanTree();
-        frequencyBasedHuffmanCompresser.generatePrefixCode();
+        Node l1=new Node(66,1);
+        Node l2=new Node(97,1);
+        Node l3=new Node(256,1);
+        Node p1=new Node(l1,l3);
+        Node rootNode=new Node(l2,p1);
+
         String[] expectedPrefixCode=new String[257];
         expectedPrefixCode[66]="10";
         expectedPrefixCode[97]="0";
         expectedPrefixCode[256]="11";
-        assertArrayEquals(expectedPrefixCode, frequencyBasedHuffmanCompresser.huffmanCode);
+        assertArrayEquals(expectedPrefixCode,frequencyBasedHuffmanCompresser.generatePrefixCode(rootNode));
     }
 
     @Test
-    public void generatePrefixCode_WhenRootNodeIsNull_ThenPrefixCodeEmpty() throws IOException {
+    public void generatePrefixCode_WhenRootNodeIsNull_ThenReturnEmptyArray() throws IOException {
         frequencyBasedHuffmanCompresser=new FrequencyBasedHuffmanCompresser();
-        frequencyBasedHuffmanCompresser.generatePrefixCode();
-        String[] expectedPrefixCode=new String[257];
-        assertArrayEquals(expectedPrefixCode, frequencyBasedHuffmanCompresser.huffmanCode);
+        assertArrayEquals(new String[257],frequencyBasedHuffmanCompresser.generatePrefixCode(null));
 
     }
 
     @Test
     public void generatePrefixCode_WhenRootNodeIsSingleNonLeafNode_ThenPrefixCodeEmpty() throws IOException {
         frequencyBasedHuffmanCompresser=new FrequencyBasedHuffmanCompresser();
-        Node root=new Node(null,null);
-        frequencyBasedHuffmanCompresser.rootNode=root;
-        frequencyBasedHuffmanCompresser.generatePrefixCode();
+        Node rootNode=new Node(null,null);
+
         String[] expectedPrefixCode=new String[257];
-        assertArrayEquals(expectedPrefixCode, frequencyBasedHuffmanCompresser.huffmanCode);
+        assertArrayEquals(expectedPrefixCode, frequencyBasedHuffmanCompresser.generatePrefixCode(rootNode));
     }
 
 
     @Test
     public void generatePrefixCode_WhenRootNodeIsSingleLeafNode_ThenPrefixCodeMatch() throws IOException {
         frequencyBasedHuffmanCompresser=new FrequencyBasedHuffmanCompresser();
-        Node root=new Node(97,1);
-        frequencyBasedHuffmanCompresser.rootNode=root;
-        frequencyBasedHuffmanCompresser.generatePrefixCode();
-        String[] expectedPrefixCode=new String[257];
-        expectedPrefixCode[97]="0";
-        assertArrayEquals(expectedPrefixCode, frequencyBasedHuffmanCompresser.huffmanCode);
+        Node rootNode=new Node(97,1);
+
+        String[] expectedHashCode=new String[257];
+        expectedHashCode[97]="0";
+        assertArrayEquals(expectedHashCode, frequencyBasedHuffmanCompresser.generatePrefixCode(rootNode));
     }
 
 
@@ -187,18 +190,25 @@ public class FrequencyBasedHuffmanCompresserTest {
         String fileInput="aB";
         InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
                 (Charset.forName("UTF-8")));
-        huffmanCompresser.calculateCharacterFrequency(inputStream);
-        huffmanCompresser.createHuffmanTree();
-        huffmanCompresser.generatePrefixCode();
 
-        InputStream inputStream2 = new ByteArrayInputStream(fileInput.getBytes
-                (Charset.forName("UTF-8")));
+
+        String[] hashCode=new String[257];
+        hashCode[97]="0";
+        hashCode[66]="10";
+        hashCode[256]="11";
+
+        Node l1=new Node(66,1);
+        Node l2=new Node(97,1);
+        Node l3=new Node(256,1);
+        Node p1=new Node(l1,l3);
+        Node rootNode=new Node(l2,p1);
+
         ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream(1);
-       assertTrue(huffmanCompresser.encodeFile(inputStream2,byteArrayOutputStream));
+       assertTrue(huffmanCompresser.encodeFile(inputStream,byteArrayOutputStream,hashCode,rootNode));
 
             byte[] compressFileArray=byteArrayOutputStream.toByteArray();
             byte[] expectedFileArray={76,41,11,0,88};
-        assertTrue(compressFileArray.length==expectedFileArray.length);
+        assertEquals(compressFileArray.length,expectedFileArray.length);
         assertTrue(Arrays.equals(compressFileArray,expectedFileArray));
 
     }
@@ -212,7 +222,13 @@ public class FrequencyBasedHuffmanCompresserTest {
         InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
                 (Charset.forName("UTF-8")));
         ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream(1);
-        huffmanCompresser.encodeFile(inputStream,byteArrayOutputStream);
+
+        String[] hashCode=new String[257];
+        hashCode[97]="0";
+
+
+
+        huffmanCompresser.encodeFile(inputStream,byteArrayOutputStream,hashCode,null);
     }
 
     @Test
@@ -224,10 +240,8 @@ public class FrequencyBasedHuffmanCompresserTest {
         InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
                 (Charset.forName("UTF-8")));
         ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream(1);
-        huffmanCompresser.encodeFile(inputStream,byteArrayOutputStream);
+        huffmanCompresser.encodeFile(inputStream,byteArrayOutputStream,null,null);
     }
-
-
 
 
     }

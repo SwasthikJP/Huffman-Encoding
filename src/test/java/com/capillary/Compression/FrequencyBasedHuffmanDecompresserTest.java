@@ -64,24 +64,26 @@ public class FrequencyBasedHuffmanDecompresserTest {
         byte[] fileInputByteArray={76,41,11,0,88};
         InputStream inputStream = new ByteArrayInputStream(fileInputByteArray);
 
-        frequencyBasedHuffmanDecompresser = new FrequencyBasedHuffmanDecompresser(inputStream);
-        frequencyBasedHuffmanDecompresser.createHuffmanTree();
+        frequencyBasedHuffmanDecompresser = new FrequencyBasedHuffmanDecompresser();
+
         Node l1 = new Node(66, 1);
         Node l2 = new Node(97, 1);
         Node l3 = new Node(256, 1);
         Node p1 = new Node(l1, l3);
         Node expectedRoot = new Node(l2, p1);
 //        dfs(frequencyBasedHuffmanDecompresser.rootNode);
-        assertTrue(dfs(expectedRoot, frequencyBasedHuffmanDecompresser.rootNode));
+        assertTrue(dfs(expectedRoot, frequencyBasedHuffmanDecompresser.createHuffmanTree(inputStream)));
 
     }
 
 
     @Test
-    public void createHuffmanTree_WhenInputStreamNull_ThenRootNodeNull() throws IOException {
+    public void createHuffmanTree_WhenInputStreamNull_ThenCatchException() throws IOException {
+        expectedException.expect(NullPointerException.class);
+        expectedException.expectMessage("inputStream is null");
         frequencyBasedHuffmanDecompresser = new FrequencyBasedHuffmanDecompresser();
-        frequencyBasedHuffmanDecompresser.createHuffmanTree();
-        assertTrue(frequencyBasedHuffmanDecompresser.rootNode == null);
+
+        frequencyBasedHuffmanDecompresser.createHuffmanTree(null);
     }
 
     @Test
@@ -91,8 +93,8 @@ public class FrequencyBasedHuffmanDecompresserTest {
         byte[] fileInputByteArray={6,2}; //aB
         InputStream inputStream = new ByteArrayInputStream(fileInputByteArray);
 
-        frequencyBasedHuffmanDecompresser = new FrequencyBasedHuffmanDecompresser(inputStream);
-        frequencyBasedHuffmanDecompresser.createHuffmanTree();
+        frequencyBasedHuffmanDecompresser = new FrequencyBasedHuffmanDecompresser();
+        frequencyBasedHuffmanDecompresser.createHuffmanTree(inputStream);
     }
 
         @Test
@@ -103,10 +105,9 @@ public class FrequencyBasedHuffmanDecompresserTest {
         InputStream inputStream = new ByteArrayInputStream(fileInputByteArray);
         ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream(1);
 
-        frequencyBasedHuffmanDecompresser = new FrequencyBasedHuffmanDecompresser(inputStream);
-        frequencyBasedHuffmanDecompresser.createHuffmanTree();
+        frequencyBasedHuffmanDecompresser = new FrequencyBasedHuffmanDecompresser();
 
-        assertTrue(frequencyBasedHuffmanDecompresser.decodeFile(byteArrayOutputStream));
+        assertTrue(frequencyBasedHuffmanDecompresser.decodeFile(byteArrayOutputStream,frequencyBasedHuffmanDecompresser.createHuffmanTree(inputStream)));
 
         String decompressedFile="aB";
         byte[] decompressedFileByteArray=decompressedFile.getBytes(Charset.forName("UTF-8"));
@@ -120,18 +121,23 @@ public class FrequencyBasedHuffmanDecompresserTest {
     public void decodeFile_WhenInputStreamIsNull_ThenReturnNull() throws IOException {
         ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream(1);
         frequencyBasedHuffmanDecompresser = new FrequencyBasedHuffmanDecompresser();
-        assertFalse(frequencyBasedHuffmanDecompresser.decodeFile(byteArrayOutputStream));
+        Node l1 = new Node(66, 1);
+        Node l2 = new Node(97, 1);
+        Node l3 = new Node(256, 1);
+        Node p1 = new Node(l1, l3);
+        Node rootNode = new Node(l2, p1);
+        assertFalse(frequencyBasedHuffmanDecompresser.decodeFile(byteArrayOutputStream,rootNode));
     }
 
     @Test
     public void decodeFile_WhenRootNodeIsNull_ThenReturnNull() throws IOException {
 
-        String fileInput="aB";
-        InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
-                (Charset.forName("UTF-8")));
+        byte[] fileInputByteArray={76,41,11,0,88};
+        InputStream inputStream = new ByteArrayInputStream(fileInputByteArray);
         ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream(1);
-        frequencyBasedHuffmanDecompresser = new FrequencyBasedHuffmanDecompresser(inputStream);
-        assertFalse(frequencyBasedHuffmanDecompresser.decodeFile(byteArrayOutputStream));
+        frequencyBasedHuffmanDecompresser = new FrequencyBasedHuffmanDecompresser();
+        frequencyBasedHuffmanDecompresser.createHuffmanTree(inputStream);
+        assertFalse(frequencyBasedHuffmanDecompresser.decodeFile(byteArrayOutputStream,null));
     }
 
 

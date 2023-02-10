@@ -16,7 +16,27 @@ public class InputStreamTest {
     InputStream inputStream;
     @Rule
     public ExpectedException expectedException=ExpectedException.none();
+
     @Test
+    public void inputStream_WhenInputStreamNull_ThenThrowNullPointerException() throws IOException{
+        expectedException.expect(NullPointerException.class);
+        expectedException.expectMessage("inputStream is null");
+        inputStream=new InputStream(null);
+    }
+
+    @Test
+    public void inputStream_WhenFileIsEmpty_ThenThrowIOException() throws IOException {
+    expectedException.expect(IOException.class);
+    expectedException.expectMessage("File is empty");
+        String input="";
+        java.io.InputStream byteStream=new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
+
+        inputStream=new InputStream(byteStream);
+    }
+
+
+
+        @Test
     public void loadBuffer_WhenNormalFile_ThenMatchBuffer() throws IOException {
         String input="a";
         java.io.InputStream byteStream=new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
