@@ -1,4 +1,8 @@
-package com.capillary.Compression;
+package com.capillary.Compression.huffmanimplementation.huffmancompression;
+import com.capillary.Compression.utils.InputStream;
+import com.capillary.Compression.utils.OutputStream;
+import com.capillary.Compression.huffmanimplementation.Node;
+
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -78,7 +82,7 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
         return hashCode;
     }
 
-    private void writeCompressedCharacters(InputStream inputStream, OutputStream outputStream,String[] hashCode)throws IOException {
+    private void writeCompressedCharacters(InputStream inputStream, OutputStream outputStream, String[] hashCode)throws IOException {
 
         int character;
         while ((character = inputStream.getByte()) != -1) {
@@ -100,6 +104,8 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
         }
 
     }
+
+
 
     @Override
     public Boolean encodeFile(java.io.InputStream fileInputStream, java.io.OutputStream fileOutputStream, String[] hashCode,Node rootNode) throws  IOException {

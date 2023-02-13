@@ -1,17 +1,15 @@
 package com.capillary.Compression;
 
-import org.junit.Assert;
+import com.capillary.Compression.huffmanimplementation.Node;
+import com.capillary.Compression.huffmanimplementation.huffmancompression.FrequencyBasedHuffmanCompresser;
+import com.capillary.Compression.huffmanimplementation.huffmancompression.IHuffmanCompresser;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.*;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.Array;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
 
 import static org.junit.Assert.*;

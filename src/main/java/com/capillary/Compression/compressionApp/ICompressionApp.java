@@ -1,4 +1,4 @@
-package com.capillary.Compression;
+package com.capillary.Compression.compressionApp;
 public interface ICompressionApp {
 
     String compress(String filePath);

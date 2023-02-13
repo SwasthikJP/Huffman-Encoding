@@ -1,10 +1,10 @@
-package com.capillary.Compression;
+package com.capillary.Compression.huffmanimplementation;
 public class Node {
-    int value;
-    int frequency;
-    Node left;
-    Node right;
-    boolean isLeafNode;
+   public int value;
+   public int frequency;
+   public Node left;
+   public Node right;
+   public boolean isLeafNode;
 
     public Node(int value, int frequency) {
         this.value = value;

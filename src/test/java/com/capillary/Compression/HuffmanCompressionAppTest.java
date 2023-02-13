@@ -1,6 +1,6 @@
 package com.capillary.Compression;
 
-import org.junit.Assert;
+import com.capillary.Compression.huffmanimplementation.HuffmanCompressionApp;
 import org.junit.Test;
 
 import java.io.*;
@@ -27,13 +27,12 @@ public class HuffmanCompressionAppTest {
         file.delete();
     }
 
-//    @Test(expected = FileNotFoundException.class)
-//    public void compress_WhenIncorrectFilePath_ThenCatchFileNotFoundException() throws IOException {
-//        huffmanCompressionApp=new HuffmanCompressionApp();
-//        String filePath="IncorrectFilePath.txt";
-//        String compressedFilepath= huffmanCompressionApp.compress(filePath);
-//
-//    }
+    @Test
+    public void compress_WhenIncorrectFilePath_ThenCatchFileNotFoundException() throws FileNotFoundException {
+        huffmanCompressionApp=new HuffmanCompressionApp();
+        String filePath="IncorrectFilePath.txt";
+        String compressedFilepath= huffmanCompressionApp.compress(filePath);
+    }
 
     @Test
     public void decompress_WhenNormalFile_ThenMatchFileContent() throws IOException {
@@ -57,6 +56,14 @@ public class HuffmanCompressionAppTest {
 
         file.delete();
         decompresedTestFile.delete();
+    }
+
+
+    @Test
+    public void decompress_WhenIncorrectFilePath_ThenCatchFileNotFoundException() throws FileNotFoundException {
+        huffmanCompressionApp=new HuffmanCompressionApp();
+        String filePath="IncorrectFilePath.txt";
+        String compressedFilepath= huffmanCompressionApp.decompress(filePath);
     }
 
 }

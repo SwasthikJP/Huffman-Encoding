@@ -1,5 +1,6 @@
 package com.capillary.Compression;
 
+import com.capillary.Compression.utils.InputStream;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -53,7 +54,7 @@ public class InputStreamTest {
         java.io.InputStream byteStream=new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
 
         inputStream=new InputStream(byteStream);
-        inputStream.fileInputStream.close();
+        inputStream.close();
         inputStream.loadBuffer();
         System.out.println(inputStream.buffer);
     }
@@ -108,7 +109,7 @@ public class InputStreamTest {
         String input="a";
         java.io.InputStream byteStream=new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
         inputStream=new InputStream(byteStream);
-        inputStream.fileInputStream.close();
+        inputStream.close();
         inputStream.getByte();
     }
 

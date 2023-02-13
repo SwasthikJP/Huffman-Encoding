@@ -1,4 +1,5 @@
-package com.capillary.Compression;
+package com.capillary.Compression.utils;
+
 import java.io.File;
 import java.time.Duration;
 

@@ -1,11 +1,11 @@
-package com.capillary.Compression;
+package com.capillary.Compression.utils;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 
 public class OutputStream {
 
-    int buffer;
-    int bufferSize;
+    public int buffer;
+    public int bufferSize;
     BufferedOutputStream fileOutputStream;
 
     public OutputStream(java.io.OutputStream outputStream){

@@ -1,4 +1,4 @@
-package com.capillary.Compression;
+package com.capillary.Compression.utils;
 public interface ICompressionStats {
 
     void startTimer();

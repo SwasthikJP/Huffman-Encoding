@@ -1,4 +1,6 @@
-package com.capillary.Compression;
+package com.capillary.Compression.huffmanimplementation.huffmandecompression;
+
+import com.capillary.Compression.huffmanimplementation.Node;
 
 import java.io.IOException;
 import java.io.InputStream;

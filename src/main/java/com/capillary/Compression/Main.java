@@ -1,4 +1,7 @@
 package com.capillary.Compression;
+import com.capillary.Compression.compressionApp.ICompressionApp;
+import com.capillary.Compression.huffmanimplementation.HuffmanCompressionApp;
+
 import java.util.Scanner;
 
 public class Main {

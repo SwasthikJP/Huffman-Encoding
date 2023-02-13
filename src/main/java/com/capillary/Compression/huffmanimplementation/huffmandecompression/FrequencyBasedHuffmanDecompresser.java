@@ -1,4 +1,8 @@
-package com.capillary.Compression;
+package com.capillary.Compression.huffmanimplementation.huffmandecompression;
+import com.capillary.Compression.utils.InputStream;
+import com.capillary.Compression.utils.OutputStream;
+import com.capillary.Compression.huffmanimplementation.Node;
+
 import java.io.IOException;
 
 public class FrequencyBasedHuffmanDecompresser implements IHuffmanDecompresser {

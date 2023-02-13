@@ -1,10 +1,10 @@
-package com.capillary.Compression;
+package com.capillary.Compression.utils;
 import java.io.*;
 
 public class InputStream {
 
-    int buffer;
-    int bufferSize;
+    public int buffer;
+    public int bufferSize;
     BufferedInputStream fileInputStream;
 
     public InputStream(java.io.InputStream inputStream) throws  IOException {

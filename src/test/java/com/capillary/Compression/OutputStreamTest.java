@@ -1,5 +1,6 @@
 package com.capillary.Compression;
 
+import com.capillary.Compression.utils.OutputStream;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -88,7 +89,6 @@ public class OutputStreamTest {
         assertEquals(0,outputStream.bufferSize);
         outputStream.closeStream();
     }
-
     @Test
     public void closeStream_WhenBufferSizeLessThanEight_ThenAddPaddingToBuffer()throws IOException {
         ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream(1);
