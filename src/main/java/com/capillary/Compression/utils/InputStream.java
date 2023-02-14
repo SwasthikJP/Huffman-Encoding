@@ -3,8 +3,8 @@ import java.io.*;
 
 public class InputStream {
 
-    public int buffer;
-    public int bufferSize;
+     int buffer;
+     int bufferSize;
     BufferedInputStream fileInputStream;
 
     public InputStream(java.io.InputStream inputStream) throws  IOException {
@@ -17,6 +17,7 @@ public class InputStream {
              }
 
             fileInputStream = new BufferedInputStream(inputStream, 1000000);
+
 
             bufferSize = 0;
             buffer = 0;

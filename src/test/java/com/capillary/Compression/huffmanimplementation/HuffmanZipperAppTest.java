@@ -1,6 +1,5 @@
-package com.capillary.Compression;
+package com.capillary.Compression.huffmanimplementation;
 
-import com.capillary.Compression.huffmanimplementation.HuffmanCompressionApp;
 import org.junit.Test;
 
 import java.io.*;
@@ -10,15 +9,15 @@ import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
-public class HuffmanCompressionAppTest {
+public class HuffmanZipperAppTest {
 
-    HuffmanCompressionApp huffmanCompressionApp;
+    HuffmanZipperApp huffmanZipperApp;
 
     @Test
     public void compress_WhenNormalFile_ThenMatchFileContent() throws IOException {
-       huffmanCompressionApp=new HuffmanCompressionApp();
+       huffmanZipperApp =new HuffmanZipperApp();
        String filePath="createHuffmanTreeNormal.txt";
-       String compressedFilepath= huffmanCompressionApp.compress(filePath);
+       String compressedFilepath= huffmanZipperApp.compress(filePath);
         byte[] expectedByteArray={76,41,11,0,88}; //aB
         InputStream inputStream=new FileInputStream(compressedFilepath);
         byte[] compressedByteArray=inputStream.readAllBytes();
@@ -29,9 +28,9 @@ public class HuffmanCompressionAppTest {
 
     @Test
     public void compress_WhenIncorrectFilePath_ThenCatchFileNotFoundException() throws FileNotFoundException {
-        huffmanCompressionApp=new HuffmanCompressionApp();
+        huffmanZipperApp =new HuffmanZipperApp();
         String filePath="IncorrectFilePath.txt";
-        String compressedFilepath= huffmanCompressionApp.compress(filePath);
+        String compressedFilepath= huffmanZipperApp.compress(filePath);
     }
 
     @Test
@@ -42,8 +41,8 @@ public class HuffmanCompressionAppTest {
         fileOutputStream.write(fileInputByteArray);
 //        fileOutputStream.close();
 
-        huffmanCompressionApp=new HuffmanCompressionApp();
-        String decompressedFilePath= huffmanCompressionApp.decompress("createHuffmanTreeNormal.huf.txt");
+        huffmanZipperApp =new HuffmanZipperApp();
+        String decompressedFilePath= huffmanZipperApp.decompress("createHuffmanTreeNormal.huf.txt");
         String decompressedFileContent="aB";
 
         File decompresedTestFile=new File(decompressedFilePath);
@@ -61,9 +60,9 @@ public class HuffmanCompressionAppTest {
 
     @Test
     public void decompress_WhenIncorrectFilePath_ThenCatchFileNotFoundException() throws FileNotFoundException {
-        huffmanCompressionApp=new HuffmanCompressionApp();
+        huffmanZipperApp =new HuffmanZipperApp();
         String filePath="IncorrectFilePath.txt";
-        String compressedFilepath= huffmanCompressionApp.decompress(filePath);
+        String compressedFilepath= huffmanZipperApp.decompress(filePath);
     }
 
 }

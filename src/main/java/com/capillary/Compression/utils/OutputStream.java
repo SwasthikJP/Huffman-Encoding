@@ -4,8 +4,8 @@ import java.io.IOException;
 
 public class OutputStream {
 
-    public int buffer;
-    public int bufferSize;
+    int buffer;
+    int bufferSize;
     BufferedOutputStream fileOutputStream;
 
     public OutputStream(java.io.OutputStream outputStream){

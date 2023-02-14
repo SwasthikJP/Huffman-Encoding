@@ -1,8 +1,10 @@
-package com.capillary.Compression;
+package com.capillary.Compression.huffmanimplementation.huffmancompression;
 
+import com.capillary.Compression.huffmanimplementation.ArrayBasedFrequencyMap;
 import com.capillary.Compression.huffmanimplementation.Node;
 import com.capillary.Compression.huffmanimplementation.huffmancompression.FrequencyBasedHuffmanCompresser;
 import com.capillary.Compression.huffmanimplementation.huffmancompression.IHuffmanCompresser;
+import com.capillary.Compression.utils.IFrequencyMap;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -34,7 +36,14 @@ public class FrequencyBasedHuffmanCompresserTest {
         result[47]=1;
         result[256]=1;
 
-        assertArrayEquals(result, frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream));
+        IFrequencyMap frequencyMap=frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream);
+
+        for(int i=0;i<result.length;i++){
+            if(result[i]!=0)
+              assertEquals(result[i],frequencyMap.get(i) );
+        }
+
+
 
     }
 
@@ -57,7 +66,13 @@ public class FrequencyBasedHuffmanCompresserTest {
         result[226]=2;
         result[240]=1;
         result[256]=1;
-        assertArrayEquals(result, frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream));
+       IFrequencyMap frequencyMap=frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream);
+        for(int i=0;i< result.length;i++){
+            if(result[i]!=0){
+                assertEquals(result[i],frequencyMap.get(i));
+            }
+        }
+
 
     }
 
@@ -110,25 +125,27 @@ public class FrequencyBasedHuffmanCompresserTest {
         InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
                 (Charset.forName("UTF-8")));
         frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream);
-        int[] characterFrequency=new int[257];
-        characterFrequency[97]=1;
-        characterFrequency[66]=1;
-        characterFrequency[256]=1;
+
+        IFrequencyMap frequencyMap=new ArrayBasedFrequencyMap(257);
+        frequencyMap.put(97,1);
+        frequencyMap.put(66,1);
+        frequencyMap.put(256,1);
 
         Node l1=new Node(66,1);
         Node l2=new Node(97,1);
         Node l3=new Node(256,1);
         Node p1=new Node(l1,l3);
         Node expectedRoot=new Node(l2,p1);
-        assertEquals(true, dfs(expectedRoot, frequencyBasedHuffmanCompresser.createHuffmanTree(characterFrequency)));
+        assertEquals(true, dfs(expectedRoot, frequencyBasedHuffmanCompresser.createHuffmanTree(frequencyMap)));
     }
 
     @Test
     public void createHuffmanTree_WhenFrequencyMapIsEmpty_ThenRootNodeIsNull() throws IOException{
         frequencyBasedHuffmanCompresser=new FrequencyBasedHuffmanCompresser();
-        int[] characterFrequency=new int[257];
 
-        assertEquals(null,frequencyBasedHuffmanCompresser.createHuffmanTree(characterFrequency));
+        IFrequencyMap frequencyMap=new ArrayBasedFrequencyMap(257);
+
+        assertEquals(null,frequencyBasedHuffmanCompresser.createHuffmanTree(frequencyMap));
 
     }
 

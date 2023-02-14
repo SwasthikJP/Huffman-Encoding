@@ -1,4 +1,4 @@
-package com.capillary.Compression;
+package com.capillary.Compression.huffmanimplementation.huffmandecompression;
 
 import com.capillary.Compression.huffmanimplementation.Node;
 import com.capillary.Compression.huffmanimplementation.huffmandecompression.FrequencyBasedHuffmanDecompresser;

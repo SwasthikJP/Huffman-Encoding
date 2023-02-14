@@ -1,4 +1,4 @@
-package com.capillary.Compression;
+package com.capillary.Compression.utils;
 
 import com.capillary.Compression.utils.InputStream;
 import org.junit.Rule;

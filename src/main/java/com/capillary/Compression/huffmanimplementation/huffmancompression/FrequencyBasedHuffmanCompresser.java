@@ -1,4 +1,6 @@
 package com.capillary.Compression.huffmanimplementation.huffmancompression;
+import com.capillary.Compression.huffmanimplementation.ArrayBasedFrequencyMap;
+import com.capillary.Compression.utils.IFrequencyMap;
 import com.capillary.Compression.utils.InputStream;
 import com.capillary.Compression.utils.OutputStream;
 import com.capillary.Compression.huffmanimplementation.Node;
@@ -11,17 +13,17 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
 
 
     @Override
-    public int[] calculateCharacterFrequency(java.io.InputStream fileInputStream) throws  IOException {
+    public IFrequencyMap calculateCharacterFrequency(java.io.InputStream fileInputStream) throws  IOException {
         int character;
-        int[] characterFrequency=new int[257];
+        IFrequencyMap frequencyMap=new ArrayBasedFrequencyMap();
         InputStream inputStream = new InputStream(fileInputStream);
 
         while ((character = inputStream.getByte()) != -1) {
-            characterFrequency[character]++;
+            frequencyMap.put(character,frequencyMap.get(character)+1);
         }
         inputStream.close();
-        characterFrequency[256] = 1;
-        return characterFrequency;
+        frequencyMap.put(256,1);
+        return frequencyMap;
     }
 
     private Node combineSubTrees(PriorityQueue<Node> pq) {
@@ -37,7 +39,7 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
     }
 
     @Override
-    public Node createHuffmanTree(int[] characterFrequency) {
+    public Node createHuffmanTree(IFrequencyMap frequencyMap) {
 
         PriorityQueue<Node> subTrees = new PriorityQueue<>(1, new Comparator<Node>() {
             @Override
@@ -46,9 +48,14 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
             }
         });
 
-        for (int i = 0; i < characterFrequency.length; i++) {
-            if (characterFrequency[i] != 0) {
-                subTrees.add(new Node(i, characterFrequency[i]));
+//        for (int i = 0; i < characterFrequency.length; i++) {
+//            if (characterFrequency[i] != 0) {
+//                subTrees.add(new Node(i, characterFrequency[i]));
+//            }
+//        }
+        for (int i = 0; i < frequencyMap.getSize(); i++) {
+            if (frequencyMap.get(i) != 0) {
+                subTrees.add(new Node(i, frequencyMap.get(i)));
             }
         }
 

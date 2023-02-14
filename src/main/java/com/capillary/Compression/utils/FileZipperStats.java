@@ -3,12 +3,12 @@ package com.capillary.Compression.utils;
 import java.io.File;
 import java.time.Duration;
 
-public class FileCompressionStats implements ICompressionStats {
+public class FileZipperStats implements IZipperStats {
 
     long startTime;
     long elapsedTime;
 
-    public FileCompressionStats(){
+    public FileZipperStats(){
         startTime=0;
         elapsedTime=0;
     }

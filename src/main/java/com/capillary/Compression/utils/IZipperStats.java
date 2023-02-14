@@ -1,5 +1,5 @@
 package com.capillary.Compression.utils;
-public interface ICompressionStats {
+public interface IZipperStats {
 
     void startTimer();
 
