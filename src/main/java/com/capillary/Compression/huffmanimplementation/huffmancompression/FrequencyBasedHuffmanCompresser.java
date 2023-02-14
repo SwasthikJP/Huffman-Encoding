@@ -1,6 +1,7 @@
 package com.capillary.Compression.huffmanimplementation.huffmancompression;
-import com.capillary.Compression.huffmanimplementation.ArrayBasedFrequencyMap;
-import com.capillary.Compression.utils.IFrequencyMap;
+import com.capillary.Compression.huffmanimplementation.IntegerArrayHashMap;
+import com.capillary.Compression.huffmanimplementation.StringArrayHashMap;
+import com.capillary.Compression.utils.IHashMap;
 import com.capillary.Compression.utils.InputStream;
 import com.capillary.Compression.utils.OutputStream;
 import com.capillary.Compression.huffmanimplementation.Node;
@@ -13,13 +14,13 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
 
 
     @Override
-    public IFrequencyMap calculateCharacterFrequency(java.io.InputStream fileInputStream) throws  IOException {
+    public IHashMap calculateCharacterFrequency(java.io.InputStream fileInputStream) throws  IOException {
         int character;
-        IFrequencyMap frequencyMap=new ArrayBasedFrequencyMap();
+        IHashMap frequencyMap=new IntegerArrayHashMap();
         InputStream inputStream = new InputStream(fileInputStream);
 
         while ((character = inputStream.getByte()) != -1) {
-            frequencyMap.put(character,frequencyMap.get(character)+1);
+            frequencyMap.put(character,(int)frequencyMap.get(character)+1);
         }
         inputStream.close();
         frequencyMap.put(256,1);
@@ -39,7 +40,7 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
     }
 
     @Override
-    public Node createHuffmanTree(IFrequencyMap frequencyMap) {
+    public Node createHuffmanTree(IHashMap frequencyMap) {
 
         PriorityQueue<Node> subTrees = new PriorityQueue<>(1, new Comparator<Node>() {
             @Override
@@ -54,49 +55,52 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
 //            }
 //        }
         for (int i = 0; i < frequencyMap.getSize(); i++) {
-            if (frequencyMap.get(i) != 0) {
-                subTrees.add(new Node(i, frequencyMap.get(i)));
+            if ((int)frequencyMap.get(i) != 0) {
+                subTrees.add(new Node(i,(int) frequencyMap.get(i)));
             }
         }
 
         return combineSubTrees(subTrees);
     }
 
-    private void preOrder(Node node, String code,String[] hashCode) {
+    private void preOrder(Node node, String code,IHashMap hashMap) {
         if (node == null) {
             return;
         }
 
         if (node.isLeafNode) {
-            hashCode[node.value] = code;
+            hashMap.put(node.value, code);
         } else {
-            preOrder(node.left, code + "0",hashCode);
-            preOrder(node.right, code + "1",hashCode);
+            preOrder(node.left, code + "0",hashMap);
+            preOrder(node.right, code + "1",hashMap);
         }
+
     }
 
     @Override
-    public String[] generatePrefixCode(Node rootNode) {
+    public IHashMap generatePrefixCode(Node rootNode) {
         if(rootNode==null){
-            return new String[257];
+            return new StringArrayHashMap();
         }
-        String[] hashCode = new String[257];
+        IHashMap hashMap = new StringArrayHashMap();
 
         if(rootNode.isLeafNode){
-            hashCode[rootNode.value]="0";
+            hashMap.put(rootNode.value,"0");
         }else
-          preOrder(rootNode, "",hashCode);
-        return hashCode;
+          preOrder(rootNode, "",hashMap);
+        return hashMap;
     }
 
-    private void writeCompressedCharacters(InputStream inputStream, OutputStream outputStream, String[] hashCode)throws IOException {
+    private void writeCompressedCharacters(InputStream inputStream, OutputStream outputStream, IHashMap hashMap)throws IOException {
 
         int character;
+        String hashCode="";
         while ((character = inputStream.getByte()) != -1) {
-            outputStream.writeBits(hashCode[character], hashCode[character].length());
+            hashCode=(String) hashMap.get(character);
+            outputStream.writeBits(hashCode, hashCode.length());
         }
-
-        outputStream.writeBits(hashCode[256], hashCode[256].length());
+        hashCode=(String)hashMap.get(256);
+        outputStream.writeBits(hashCode,hashCode.length());
     }
 
     private void writeHeaderInfo(Node node, OutputStream outputStream) throws IOException{
@@ -115,7 +119,7 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
 
 
     @Override
-    public Boolean encodeFile(java.io.InputStream fileInputStream, java.io.OutputStream fileOutputStream, String[] hashCode,Node rootNode) throws  IOException {
+    public Boolean encodeFile(java.io.InputStream fileInputStream, java.io.OutputStream fileOutputStream, IHashMap hashMap,Node rootNode) throws  IOException {
         InputStream inputStream = new InputStream(fileInputStream);
 
         if(rootNode==null){
@@ -125,7 +129,7 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
 
         writeHeaderInfo(rootNode, outputStream);
 
-        writeCompressedCharacters(inputStream, outputStream, hashCode);
+        writeCompressedCharacters(inputStream, outputStream, hashMap);
         inputStream.close();
         outputStream.closeStream();
         return true;

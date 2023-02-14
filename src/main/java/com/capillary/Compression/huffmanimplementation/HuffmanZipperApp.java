@@ -1,18 +1,12 @@
 package com.capillary.Compression.huffmanimplementation;
 
 import com.capillary.Compression.utils.IFileHandler;
-import com.capillary.Compression.utils.IFrequencyMap;
+import com.capillary.Compression.utils.IHashMap;
 import com.capillary.Compression.zipper.IZipperApp;
-import com.capillary.Compression.utils.FileZipperStats;
-import com.capillary.Compression.utils.IZipperStats;
 import com.capillary.Compression.huffmanimplementation.huffmancompression.FrequencyBasedHuffmanCompresser;
 import com.capillary.Compression.huffmanimplementation.huffmancompression.IHuffmanCompresser;
 import com.capillary.Compression.huffmanimplementation.huffmandecompression.FrequencyBasedHuffmanDecompresser;
 import com.capillary.Compression.huffmanimplementation.huffmandecompression.IHuffmanDecompresser;
-
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 
 public class HuffmanZipperApp implements IZipperApp {
 
@@ -30,31 +24,22 @@ public class HuffmanZipperApp implements IZipperApp {
 //    }
 
     @Override
-    public String compress(IFileHandler fileHandler) {
-        String compressFilePath="";
+    public void compress(IFileHandler fileHandler) {
+
 //        IZipperStats compressionStats = new FileZipperStats();
 //        compressionStats.startTimer();
-        try
-//                (InputStream fileInputStream=new FileInputStream(filePath);
-//             InputStream fileInputStream2=new FileInputStream(filePath)
-//        )
-        {
+        try {
 
             IHuffmanCompresser huffmanCompresser = new FrequencyBasedHuffmanCompresser();
 
-//            int[] frequencyMap=huffmanCompresser.calculateCharacterFrequency(fileInputStream);
-            IFrequencyMap frequencyMap=huffmanCompresser.calculateCharacterFrequency(fileHandler.getInputStream());
+            IHashMap frequencyMap=huffmanCompresser.calculateCharacterFrequency(fileHandler.getInputStream());
             Node rootNode=huffmanCompresser.createHuffmanTree(frequencyMap);
-            String[] hashCode= huffmanCompresser.generatePrefixCode(rootNode);
+            IHashMap hashMap= huffmanCompresser.generatePrefixCode(rootNode);
 
 //            System.out.println("average code length is "+calculateAverageCode(frequencyMap,hashCode));
 
 
-//            String[] filePathSplit=filePath.split("\\.(?=[^\\.]+$)");
-//            compressFilePath=filePathSplit[0]+".huf.txt";
-//            FileOutputStream fileOutputStream=new FileOutputStream(compressFilePath);
-
-            huffmanCompresser.encodeFile(fileHandler.getInputStream(),fileHandler.getOutputStream(),hashCode, rootNode);
+            huffmanCompresser.encodeFile(fileHandler.getInputStream(),fileHandler.getOutputStream(),hashMap, rootNode);
 
 //            compressionStats.stopTimer();
 //            compressionStats.displayCompressionStats(filePath, compressFilePath);
@@ -62,12 +47,11 @@ public class HuffmanZipperApp implements IZipperApp {
         catch (Exception e){
             e.printStackTrace();
         }
-        return compressFilePath;
     }
 
     @Override
-    public String decompress(IFileHandler fileHandler) {
-        String decompressFilePath="";
+    public void decompress(IFileHandler fileHandler) {
+
 //        IZipperStats compressionStats = new FileZipperStats();
 //        compressionStats.startTimer();
         try {
@@ -75,8 +59,6 @@ public class HuffmanZipperApp implements IZipperApp {
             IHuffmanDecompresser huffmanDecompresser = new FrequencyBasedHuffmanDecompresser();
 
            Node rootNode=huffmanDecompresser.createHuffmanTree(fileHandler.getInputStream());
-
-
 
             huffmanDecompresser.decodeFile(fileHandler.getOutputStream(),rootNode);
 
@@ -87,7 +69,6 @@ public class HuffmanZipperApp implements IZipperApp {
         catch (Exception e){
             e.printStackTrace();
         }
-        return decompressFilePath;
 
     }
 

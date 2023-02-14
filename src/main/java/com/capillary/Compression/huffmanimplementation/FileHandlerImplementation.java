@@ -23,5 +23,4 @@ public class FileHandlerImplementation implements IFileHandler {
         return new FileOutputStream(outputFilePath);
     }
 
-
 }

@@ -1,5 +1,5 @@
 package com.capillary.Compression.huffmanimplementation.huffmancompression;
-import com.capillary.Compression.utils.IFrequencyMap;
+import com.capillary.Compression.utils.IHashMap;
 import com.capillary.Compression.huffmanimplementation.Node;
 
 import java.io.IOException;
@@ -8,12 +8,12 @@ import java.io.OutputStream;
 
 public interface IHuffmanCompresser {
 
-    Boolean encodeFile(InputStream inputStream, OutputStream outputStream, String[] hashCode, Node rootNode) throws IOException;
+    Boolean encodeFile(InputStream inputStream, OutputStream outputStream, IHashMap hashMap, Node rootNode) throws IOException;
 
-    Node createHuffmanTree(IFrequencyMap frequencyMap);
+    Node createHuffmanTree(IHashMap frequencyMap);
 
-    String[] generatePrefixCode(Node rootNode);
+    IHashMap generatePrefixCode(Node rootNode);
 
-    IFrequencyMap calculateCharacterFrequency(InputStream inputStream) throws IOException;
+    IHashMap calculateCharacterFrequency(InputStream inputStream) throws IOException;
 
 }

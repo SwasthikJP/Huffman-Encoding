@@ -1,10 +1,9 @@
 package com.capillary.Compression.huffmanimplementation.huffmancompression;
 
-import com.capillary.Compression.huffmanimplementation.ArrayBasedFrequencyMap;
+import com.capillary.Compression.huffmanimplementation.IntegerArrayHashMap;
 import com.capillary.Compression.huffmanimplementation.Node;
-import com.capillary.Compression.huffmanimplementation.huffmancompression.FrequencyBasedHuffmanCompresser;
-import com.capillary.Compression.huffmanimplementation.huffmancompression.IHuffmanCompresser;
-import com.capillary.Compression.utils.IFrequencyMap;
+import com.capillary.Compression.huffmanimplementation.StringArrayHashMap;
+import com.capillary.Compression.utils.IHashMap;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -36,7 +35,7 @@ public class FrequencyBasedHuffmanCompresserTest {
         result[47]=1;
         result[256]=1;
 
-        IFrequencyMap frequencyMap=frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream);
+        IHashMap frequencyMap=frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream);
 
         for(int i=0;i<result.length;i++){
             if(result[i]!=0)
@@ -66,7 +65,7 @@ public class FrequencyBasedHuffmanCompresserTest {
         result[226]=2;
         result[240]=1;
         result[256]=1;
-       IFrequencyMap frequencyMap=frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream);
+       IHashMap frequencyMap=frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream);
         for(int i=0;i< result.length;i++){
             if(result[i]!=0){
                 assertEquals(result[i],frequencyMap.get(i));
@@ -126,7 +125,7 @@ public class FrequencyBasedHuffmanCompresserTest {
                 (Charset.forName("UTF-8")));
         frequencyBasedHuffmanCompresser.calculateCharacterFrequency(inputStream);
 
-        IFrequencyMap frequencyMap=new ArrayBasedFrequencyMap(257);
+        IHashMap frequencyMap=new IntegerArrayHashMap();
         frequencyMap.put(97,1);
         frequencyMap.put(66,1);
         frequencyMap.put(256,1);
@@ -143,7 +142,7 @@ public class FrequencyBasedHuffmanCompresserTest {
     public void createHuffmanTree_WhenFrequencyMapIsEmpty_ThenRootNodeIsNull() throws IOException{
         frequencyBasedHuffmanCompresser=new FrequencyBasedHuffmanCompresser();
 
-        IFrequencyMap frequencyMap=new ArrayBasedFrequencyMap(257);
+        IHashMap frequencyMap=new IntegerArrayHashMap();
 
         assertEquals(null,frequencyBasedHuffmanCompresser.createHuffmanTree(frequencyMap));
 
@@ -167,14 +166,23 @@ public class FrequencyBasedHuffmanCompresserTest {
         expectedPrefixCode[66]="10";
         expectedPrefixCode[97]="0";
         expectedPrefixCode[256]="11";
-        assertArrayEquals(expectedPrefixCode,frequencyBasedHuffmanCompresser.generatePrefixCode(rootNode));
+
+         IHashMap hashMap=frequencyBasedHuffmanCompresser.generatePrefixCode(rootNode);
+         for(int i=0;i<expectedPrefixCode.length;i++){
+             if(expectedPrefixCode[i]!=null){
+                 assertEquals(expectedPrefixCode[i],hashMap.get(i));
+             }
+         }
     }
 
     @Test
     public void generatePrefixCode_WhenRootNodeIsNull_ThenReturnEmptyArray() throws IOException {
         frequencyBasedHuffmanCompresser=new FrequencyBasedHuffmanCompresser();
-        assertArrayEquals(new String[257],frequencyBasedHuffmanCompresser.generatePrefixCode(null));
 
+        IHashMap hashMap=frequencyBasedHuffmanCompresser.generatePrefixCode(null);
+        for(int i=0;i<257;i++){
+                assertEquals(null,hashMap.get(i));
+        }
     }
 
     @Test
@@ -182,8 +190,11 @@ public class FrequencyBasedHuffmanCompresserTest {
         frequencyBasedHuffmanCompresser=new FrequencyBasedHuffmanCompresser();
         Node rootNode=new Node(null,null);
 
-        String[] expectedPrefixCode=new String[257];
-        assertArrayEquals(expectedPrefixCode, frequencyBasedHuffmanCompresser.generatePrefixCode(rootNode));
+
+        IHashMap hashMap=frequencyBasedHuffmanCompresser.generatePrefixCode(rootNode);
+        for(int i=0;i<257;i++){
+                assertEquals(null,hashMap.get(i));
+        }
     }
 
 
@@ -194,7 +205,13 @@ public class FrequencyBasedHuffmanCompresserTest {
 
         String[] expectedHashCode=new String[257];
         expectedHashCode[97]="0";
-        assertArrayEquals(expectedHashCode, frequencyBasedHuffmanCompresser.generatePrefixCode(rootNode));
+
+        IHashMap hashMap=frequencyBasedHuffmanCompresser.generatePrefixCode(rootNode);
+        for(int i=0;i<expectedHashCode.length;i++){
+            if(expectedHashCode[i]!=null){
+                assertEquals(expectedHashCode[i],hashMap.get(i));
+            }
+        }
     }
 
 
@@ -207,10 +224,11 @@ public class FrequencyBasedHuffmanCompresserTest {
                 (Charset.forName("UTF-8")));
 
 
-        String[] hashCode=new String[257];
-        hashCode[97]="0";
-        hashCode[66]="10";
-        hashCode[256]="11";
+
+        IHashMap hashMap=new StringArrayHashMap();
+        hashMap.put(97,"0");
+        hashMap.put(66,"10");
+        hashMap.put(256,"11");
 
         Node l1=new Node(66,1);
         Node l2=new Node(97,1);
@@ -219,7 +237,7 @@ public class FrequencyBasedHuffmanCompresserTest {
         Node rootNode=new Node(l2,p1);
 
         ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream(1);
-       assertTrue(huffmanCompresser.encodeFile(inputStream,byteArrayOutputStream,hashCode,rootNode));
+       assertTrue(huffmanCompresser.encodeFile(inputStream,byteArrayOutputStream,hashMap,rootNode));
 
             byte[] compressFileArray=byteArrayOutputStream.toByteArray();
             byte[] expectedFileArray={76,41,11,0,88};
@@ -238,12 +256,12 @@ public class FrequencyBasedHuffmanCompresserTest {
                 (Charset.forName("UTF-8")));
         ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream(1);
 
-        String[] hashCode=new String[257];
-        hashCode[97]="0";
+
+         IHashMap hashMap=new StringArrayHashMap();
+         hashMap.put(97,"0");
 
 
-
-        huffmanCompresser.encodeFile(inputStream,byteArrayOutputStream,hashCode,null);
+        huffmanCompresser.encodeFile(inputStream,byteArrayOutputStream,hashMap,null);
     }
 
     @Test

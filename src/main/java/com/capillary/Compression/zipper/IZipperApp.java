@@ -4,8 +4,8 @@ import com.capillary.Compression.utils.IFileHandler;
 
 public interface IZipperApp {
 
-    String compress(IFileHandler fileHandler);
+    void compress(IFileHandler fileHandler);
 
-    String decompress(IFileHandler fileHandler);
+    void decompress(IFileHandler fileHandler);
 
 }

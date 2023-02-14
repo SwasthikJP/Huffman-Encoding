@@ -27,8 +27,8 @@ public class Main {
 
                     System.out.println("Enter the file path for compression");
                     filePath = scanner.next();
-            String[] filePathSplit=filePath.split("\\.(?=[^\\.]+$)");
-            String compressFilePath=filePathSplit[0]+".huf.txt";
+                    String[] filePathSplit=filePath.split("\\.(?=[^\\.]+$)");
+                    String compressFilePath=filePathSplit[0]+".huf.txt";
                     IFileHandler fileHandler=new FileHandlerImplementation(filePath,compressFilePath);
                     iApp.compress(fileHandler);
 
