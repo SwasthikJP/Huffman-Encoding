@@ -1,12 +1,12 @@
 package com.capillary.Compression.huffmanimplementation.huffmanutils;
 public class Node {
-   public int value;
+   public Object value;
    public int frequency;
    public Node left;
    public Node right;
    public boolean isLeafNode;
 
-    public Node(int value, int frequency) {
+    public Node(Object value, int frequency) {
         this.value = value;
         this.frequency = frequency;
         left = null;
@@ -15,7 +15,7 @@ public class Node {
     }
 
     public Node(Node leftNode, Node rightNode) {
-        this.value = -1;
+        this.value = null;
         if(leftNode!=null && rightNode!=null){
             this.frequency = leftNode.frequency + rightNode.frequency;
         }else{

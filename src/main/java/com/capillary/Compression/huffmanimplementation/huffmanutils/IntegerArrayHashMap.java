@@ -2,6 +2,8 @@ package com.capillary.Compression.huffmanimplementation.huffmanutils;
 
 import com.capillary.Compression.utils.IHashMap;
 
+import java.util.Set;
+
 public class IntegerArrayHashMap implements IHashMap {
 
     int[] map;
@@ -34,4 +36,11 @@ public class IntegerArrayHashMap implements IHashMap {
     public int getSize() {
         return map.length;
     }
+
+    @Override
+    public Set<?> keySet() {
+        return null;
+    }
+
+
 }

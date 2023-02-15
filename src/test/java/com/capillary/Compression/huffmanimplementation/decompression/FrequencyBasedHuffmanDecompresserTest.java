@@ -1,4 +1,4 @@
-package com.capillary.Compression.huffmanimplementation.huffmandecompression;
+package com.capillary.Compression.huffmanimplementation.decompression;
 
 import com.capillary.Compression.huffmanimplementation.huffmanutils.Node;
 import org.junit.Rule;

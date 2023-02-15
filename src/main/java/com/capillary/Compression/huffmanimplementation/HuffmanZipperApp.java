@@ -4,10 +4,10 @@ import com.capillary.Compression.huffmanimplementation.huffmanutils.Node;
 import com.capillary.Compression.utils.IFileHandler;
 import com.capillary.Compression.utils.IHashMap;
 import com.capillary.Compression.zipper.IZipperApp;
-import com.capillary.Compression.huffmanimplementation.huffmancompression.FrequencyBasedHuffmanCompresser;
-import com.capillary.Compression.huffmanimplementation.huffmancompression.IHuffmanCompresser;
-import com.capillary.Compression.huffmanimplementation.huffmandecompression.FrequencyBasedHuffmanDecompresser;
-import com.capillary.Compression.huffmanimplementation.huffmandecompression.IHuffmanDecompresser;
+import com.capillary.Compression.huffmanimplementation.compression.FrequencyBasedHuffmanCompresser;
+import com.capillary.Compression.huffmanimplementation.compression.IHuffmanCompresser;
+import com.capillary.Compression.huffmanimplementation.decompression.FrequencyBasedHuffmanDecompresser;
+import com.capillary.Compression.huffmanimplementation.decompression.IHuffmanDecompresser;
 
 public class HuffmanZipperApp implements IZipperApp {
 
@@ -59,7 +59,7 @@ public class HuffmanZipperApp implements IZipperApp {
 
             IHuffmanDecompresser huffmanDecompresser = new FrequencyBasedHuffmanDecompresser();
 
-           Node rootNode=huffmanDecompresser.createHuffmanTree(fileHandler.getInputStream());
+           Node rootNode=(Node)huffmanDecompresser.createHuffmanTree(fileHandler.getInputStream());
 
             huffmanDecompresser.decodeFile(fileHandler.getOutputStream(),rootNode);
 

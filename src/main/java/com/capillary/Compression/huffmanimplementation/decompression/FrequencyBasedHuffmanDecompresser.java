@@ -1,4 +1,4 @@
-package com.capillary.Compression.huffmanimplementation.huffmandecompression;
+package com.capillary.Compression.huffmanimplementation.decompression;
 import com.capillary.Compression.huffmanimplementation.huffmanutils.CompressedFileReaderWriterImpl;
 import com.capillary.Compression.huffmanimplementation.huffmanutils.PreorderHeaderInfoReaderWriter;
 import com.capillary.Compression.utils.ICompressedFileReaderWriter;
@@ -25,7 +25,7 @@ public class FrequencyBasedHuffmanDecompresser implements IHuffmanDecompresser {
     }
 
     @Override
-    public Boolean decodeFile( java.io.OutputStream fileOutputStream, Node rootNode) throws IOException{
+    public Boolean decodeFile( java.io.OutputStream fileOutputStream, Object rootNode) throws IOException{
 
         if (inputStream == null || rootNode==null) {
             return false;
@@ -34,7 +34,7 @@ public class FrequencyBasedHuffmanDecompresser implements IHuffmanDecompresser {
 
         ICompressedFileReaderWriter compressedFileReaderWriter=new CompressedFileReaderWriterImpl();
 
-        return compressedFileReaderWriter.readCompressedFile(inputStream,outputStream,rootNode);
+        return compressedFileReaderWriter.readCompressedFile(inputStream,outputStream,(Node)rootNode);
     }
 
 }

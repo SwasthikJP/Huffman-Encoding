@@ -1,6 +1,8 @@
 package com.capillary.Compression.utils;
 import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 public class OutputStream {
 
@@ -50,6 +52,12 @@ public class OutputStream {
             writeBit(bit);
         }
     }
+
+    public void writeObject(Object obj)throws IOException{
+        ObjectOutputStream outputStream=new ObjectOutputStream(fileOutputStream);
+        outputStream.writeObject(obj);
+    }
+
 
     public void writeByte(int bits) throws IOException{
             fileOutputStream.write(bits);

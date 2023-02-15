@@ -1,4 +1,4 @@
-package com.capillary.Compression.huffmanimplementation.huffmancompression;
+package com.capillary.Compression.huffmanimplementation.compression;
 
 import com.capillary.Compression.huffmanimplementation.huffmanutils.IntegerArrayHashMap;
 import com.capillary.Compression.huffmanimplementation.huffmanutils.Node;

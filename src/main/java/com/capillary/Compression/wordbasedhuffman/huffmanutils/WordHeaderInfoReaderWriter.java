@@ -1,12 +1,12 @@
-package com.capillary.Compression.huffmanimplementation.huffmanutils;
+package com.capillary.Compression.wordbasedhuffman.huffmanutils;
 
-import com.capillary.Compression.utils.IHeaderInfoReaderWriter;
-import com.capillary.Compression.utils.InputStream;
-import com.capillary.Compression.utils.OutputStream;
+import com.capillary.Compression.huffmanimplementation.huffmanutils.Node;
+import com.capillary.Compression.utils.*;
 
 import java.io.IOException;
 
-public class PreorderHeaderInfoReaderWriter implements IHeaderInfoReaderWriter {
+public class WordHeaderInfoReaderWriter implements IHeaderInfoReaderWriter {
+
     @Override
     public Node readHeaderInfo(InputStream inputStream) throws IOException {
         int bit=inputStream.getBit();
@@ -17,7 +17,12 @@ public class PreorderHeaderInfoReaderWriter implements IHeaderInfoReaderWriter {
         if (bit == 0) {
             return new Node(readHeaderInfo(inputStream), readHeaderInfo(inputStream));
         }
-        return new Node(inputStream.getBits(9), 0);
+        int wordLength=inputStream.getBits(8);
+        String word="";
+        for(int i=0;i<wordLength;i++){
+            word=word+(char)inputStream.getBits(8);
+        }
+        return new Node(word, 0);
     }
 
     @Override
@@ -27,11 +32,20 @@ public class PreorderHeaderInfoReaderWriter implements IHeaderInfoReaderWriter {
         }
         if (node.isLeafNode) {
             outputStream.writeBit(1);
-            outputStream.writeBits((int)node.value, 9);
+            String nodeValue=(String) node.value;
+            outputStream.writeBits(nodeValue.length(),8);
+            for(int i=0;i<nodeValue.length();i++){
+                outputStream.writeBits((int)nodeValue.charAt(i), 8);
+            }
         } else {
             outputStream.writeBit(0);
             return  writeHeaderInfo(node.left, outputStream)&&writeHeaderInfo(node.right, outputStream);
         }
         return true;
     }
+
+
+
+
+
 }

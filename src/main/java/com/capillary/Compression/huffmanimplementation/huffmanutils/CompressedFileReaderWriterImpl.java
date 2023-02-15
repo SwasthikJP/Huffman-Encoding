@@ -20,20 +20,22 @@ public class CompressedFileReaderWriterImpl implements ICompressedFileReaderWrit
         outputStream.writeBits(hashCode,hashCode.length());
     }
 
+
+
     @Override
     public Boolean readCompressedFile(InputStream inputStream, OutputStream outputStream, Node rootNode) throws IOException {
         int bit;
-        Node node=rootNode;
+        Node node=(Node)rootNode;
         while ((bit = inputStream.getBit()) != -1) {
 
 
             if (node.isLeafNode) {
-                if (node.value == 256) {
+                if ((int)node.value == 256) {
                     outputStream.closeStream();
                     return true;
                 }
-                outputStream.writeByte(node.value);
-                node = rootNode;
+                outputStream.writeByte((int)node.value);
+                node =(Node) rootNode;
             }
             if (bit == 0) {
                 node = node.left;

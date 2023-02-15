@@ -75,6 +75,12 @@ public class InputStream {
         }
     }
 
+    public Object getObject()throws Exception{
+        ObjectInputStream inputStream=new ObjectInputStream(fileInputStream);
+       Object object= inputStream.readObject();
+       return object;
+    }
+
     public void close() throws IOException{
             fileInputStream.close();
     }
