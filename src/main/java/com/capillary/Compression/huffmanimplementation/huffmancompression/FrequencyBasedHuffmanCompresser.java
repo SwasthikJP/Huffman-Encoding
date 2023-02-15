@@ -1,10 +1,6 @@
 package com.capillary.Compression.huffmanimplementation.huffmancompression;
-import com.capillary.Compression.huffmanimplementation.IntegerArrayHashMap;
-import com.capillary.Compression.huffmanimplementation.StringArrayHashMap;
-import com.capillary.Compression.utils.IHashMap;
-import com.capillary.Compression.utils.InputStream;
-import com.capillary.Compression.utils.OutputStream;
-import com.capillary.Compression.huffmanimplementation.Node;
+import com.capillary.Compression.huffmanimplementation.huffmanutils.*;
+import com.capillary.Compression.utils.*;
 
 import java.io.IOException;
 import java.util.Comparator;
@@ -49,11 +45,6 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
             }
         });
 
-//        for (int i = 0; i < characterFrequency.length; i++) {
-//            if (characterFrequency[i] != 0) {
-//                subTrees.add(new Node(i, characterFrequency[i]));
-//            }
-//        }
         for (int i = 0; i < frequencyMap.getSize(); i++) {
             if ((int)frequencyMap.get(i) != 0) {
                 subTrees.add(new Node(i,(int) frequencyMap.get(i)));
@@ -91,32 +82,6 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
         return hashMap;
     }
 
-    private void writeCompressedCharacters(InputStream inputStream, OutputStream outputStream, IHashMap hashMap)throws IOException {
-
-        int character;
-        String hashCode="";
-        while ((character = inputStream.getByte()) != -1) {
-            hashCode=(String) hashMap.get(character);
-            outputStream.writeBits(hashCode, hashCode.length());
-        }
-        hashCode=(String)hashMap.get(256);
-        outputStream.writeBits(hashCode,hashCode.length());
-    }
-
-    private void writeHeaderInfo(Node node, OutputStream outputStream) throws IOException{
-
-        if (node.isLeafNode) {
-            outputStream.writeBit(1);
-            outputStream.writeBits(node.value, 9);
-        } else {
-            outputStream.writeBit(0);
-            writeHeaderInfo(node.left, outputStream);
-            writeHeaderInfo(node.right, outputStream);
-        }
-
-    }
-
-
 
     @Override
     public Boolean encodeFile(java.io.InputStream fileInputStream, java.io.OutputStream fileOutputStream, IHashMap hashMap,Node rootNode) throws  IOException {
@@ -127,9 +92,12 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
         }
         OutputStream outputStream = new OutputStream(fileOutputStream);
 
-        writeHeaderInfo(rootNode, outputStream);
+        IHeaderInfoReaderWriter headerInfoReaderWriter=new PreorderHeaderInfoReaderWriter();
+        headerInfoReaderWriter.writeHeaderInfo(rootNode, outputStream);
 
-        writeCompressedCharacters(inputStream, outputStream, hashMap);
+        ICompressedFileReaderWriter compressedFileReaderWriter=new CompressedFileReaderWriterImpl();
+        compressedFileReaderWriter.writeCompressedFile(inputStream, outputStream, hashMap);
+
         inputStream.close();
         outputStream.closeStream();
         return true;

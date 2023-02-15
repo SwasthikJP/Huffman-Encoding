@@ -1,13 +1,13 @@
 package com.capillary.Compression.huffmanimplementation;
 
+import com.capillary.Compression.huffmanimplementation.huffmanutils.FileHandlerImplementation;
+import com.capillary.Compression.huffmanimplementation.huffmanutils.TestFileHandlerImplementation;
 import com.capillary.Compression.utils.IFileHandler;
 import org.junit.Test;
 
 import java.io.*;
-import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Arrays;
-import java.util.logging.FileHandler;
 
 import static org.junit.Assert.*;
 

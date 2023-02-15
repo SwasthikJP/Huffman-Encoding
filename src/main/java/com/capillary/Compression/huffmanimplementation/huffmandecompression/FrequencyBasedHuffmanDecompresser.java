@@ -1,7 +1,11 @@
 package com.capillary.Compression.huffmanimplementation.huffmandecompression;
+import com.capillary.Compression.huffmanimplementation.huffmanutils.CompressedFileReaderWriterImpl;
+import com.capillary.Compression.huffmanimplementation.huffmanutils.PreorderHeaderInfoReaderWriter;
+import com.capillary.Compression.utils.ICompressedFileReaderWriter;
+import com.capillary.Compression.utils.IHeaderInfoReaderWriter;
 import com.capillary.Compression.utils.InputStream;
 import com.capillary.Compression.utils.OutputStream;
-import com.capillary.Compression.huffmanimplementation.Node;
+import com.capillary.Compression.huffmanimplementation.huffmanutils.Node;
 
 import java.io.IOException;
 
@@ -11,23 +15,13 @@ public class FrequencyBasedHuffmanDecompresser implements IHuffmanDecompresser {
    private InputStream inputStream;
 
 
-    private Node readHeaderInfo(InputStream inputStream) throws IOException {
-        int bit=inputStream.getBit();
-        if(bit==-1){
-            throw new IOException("Incorrect Header");
-        }
-
-        if (bit == 0) {
-            return new Node(readHeaderInfo(inputStream), readHeaderInfo(inputStream));
-        }
-        return new Node(inputStream.getBits(9), 0);
-    }
 
     @Override
     public Node createHuffmanTree(java.io.InputStream fileInputStream) throws IOException{
         inputStream = new InputStream(fileInputStream);
         inputStream.loadBuffer();
-        return readHeaderInfo(inputStream);
+        IHeaderInfoReaderWriter headerInfoReaderWriter=new PreorderHeaderInfoReaderWriter();
+        return  headerInfoReaderWriter.readHeaderInfo(inputStream);
     }
 
     @Override
@@ -38,26 +32,9 @@ public class FrequencyBasedHuffmanDecompresser implements IHuffmanDecompresser {
         }
        OutputStream outputStream = new OutputStream(fileOutputStream);
 
-        int bit;
-        Node node = rootNode;
-        while ((bit = inputStream.getBit()) != -1) {
+        ICompressedFileReaderWriter compressedFileReaderWriter=new CompressedFileReaderWriterImpl();
 
-
-            if (node.isLeafNode) {
-                if (node.value == 256) {
-                    outputStream.closeStream();
-                    return true;
-                }
-                outputStream.writeByte(node.value);
-                node = rootNode;
-            }
-            if (bit == 0) {
-                node = node.left;
-            } else {
-                node = node.right;
-            }
-        }
-        return false;
+        return compressedFileReaderWriter.readCompressedFile(inputStream,outputStream,rootNode);
     }
 
 }

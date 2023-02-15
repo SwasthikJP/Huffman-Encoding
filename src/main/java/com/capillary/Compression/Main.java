@@ -1,11 +1,10 @@
 package com.capillary.Compression;
-import com.capillary.Compression.huffmanimplementation.FileHandlerImplementation;
+import com.capillary.Compression.huffmanimplementation.huffmanutils.FileHandlerImplementation;
 import com.capillary.Compression.huffmanimplementation.HuffmanZipperApp;
 import com.capillary.Compression.utils.IFileHandler;
 import com.capillary.Compression.zipper.IZipperApp;
 
 import java.util.Scanner;
-import java.util.logging.FileHandler;
 
 public class Main {
 

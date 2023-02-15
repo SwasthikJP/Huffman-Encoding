@@ -1,6 +1,6 @@
 package com.capillary.Compression.huffmanimplementation.huffmancompression;
 import com.capillary.Compression.utils.IHashMap;
-import com.capillary.Compression.huffmanimplementation.Node;
+import com.capillary.Compression.huffmanimplementation.huffmanutils.Node;
 
 import java.io.IOException;
 import java.io.InputStream;

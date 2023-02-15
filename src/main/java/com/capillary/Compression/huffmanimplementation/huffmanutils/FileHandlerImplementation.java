@@ -1,4 +1,4 @@
-package com.capillary.Compression.huffmanimplementation;
+package com.capillary.Compression.huffmanimplementation.huffmanutils;
 
 import com.capillary.Compression.utils.IFileHandler;
 

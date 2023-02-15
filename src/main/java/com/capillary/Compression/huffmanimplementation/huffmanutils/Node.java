@@ -1,4 +1,4 @@
-package com.capillary.Compression.huffmanimplementation;
+package com.capillary.Compression.huffmanimplementation.huffmanutils;
 public class Node {
    public int value;
    public int frequency;

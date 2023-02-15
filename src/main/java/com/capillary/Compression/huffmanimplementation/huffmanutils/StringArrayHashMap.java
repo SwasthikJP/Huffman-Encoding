@@ -1,28 +1,27 @@
-package com.capillary.Compression.huffmanimplementation;
+package com.capillary.Compression.huffmanimplementation.huffmanutils;
 
 import com.capillary.Compression.utils.IHashMap;
 
-public class IntegerArrayHashMap implements IHashMap {
+public class StringArrayHashMap implements IHashMap {
 
-    int[] map;
+    String[] map;
     static int size=257;
 
-    public IntegerArrayHashMap(){
-        map=new int[size];
+    public StringArrayHashMap(){
+        map=new String[257];
     }
-
 
     @Override
     public void put(Object key, Object value)throws ArrayIndexOutOfBoundsException {
         if((int)key>=0 && (int)key<size){
-            map[(int)key]=(int)value;
+            map[(int)key]=(String) value;
         }else{
             throw new ArrayIndexOutOfBoundsException("Hash key out of bound");
         }
     }
 
     @Override
-    public Integer get(Object key) {
+    public String get(Object key) {
         if((int)key>=0 && (int)key<size){
             return map[(int)key];
         }else{

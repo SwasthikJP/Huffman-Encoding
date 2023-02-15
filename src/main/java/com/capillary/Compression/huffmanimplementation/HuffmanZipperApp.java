@@ -1,5 +1,6 @@
 package com.capillary.Compression.huffmanimplementation;
 
+import com.capillary.Compression.huffmanimplementation.huffmanutils.Node;
 import com.capillary.Compression.utils.IFileHandler;
 import com.capillary.Compression.utils.IHashMap;
 import com.capillary.Compression.zipper.IZipperApp;

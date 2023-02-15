@@ -1,7 +1,6 @@
 package com.capillary.Compression.huffmanimplementation.huffmandecompression;
 
-import com.capillary.Compression.huffmanimplementation.Node;
-import com.capillary.Compression.huffmanimplementation.huffmandecompression.FrequencyBasedHuffmanDecompresser;
+import com.capillary.Compression.huffmanimplementation.huffmanutils.Node;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

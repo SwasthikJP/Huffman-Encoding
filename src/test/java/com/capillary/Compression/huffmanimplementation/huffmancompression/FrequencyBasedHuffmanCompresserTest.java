@@ -1,8 +1,8 @@
 package com.capillary.Compression.huffmanimplementation.huffmancompression;
 
-import com.capillary.Compression.huffmanimplementation.IntegerArrayHashMap;
-import com.capillary.Compression.huffmanimplementation.Node;
-import com.capillary.Compression.huffmanimplementation.StringArrayHashMap;
+import com.capillary.Compression.huffmanimplementation.huffmanutils.IntegerArrayHashMap;
+import com.capillary.Compression.huffmanimplementation.huffmanutils.Node;
+import com.capillary.Compression.huffmanimplementation.huffmanutils.StringArrayHashMap;
 import com.capillary.Compression.utils.IHashMap;
 import org.junit.Rule;
 import org.junit.Test;
