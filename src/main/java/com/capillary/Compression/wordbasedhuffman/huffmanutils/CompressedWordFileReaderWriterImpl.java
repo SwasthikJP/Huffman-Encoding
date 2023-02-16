@@ -15,10 +15,18 @@ public class CompressedWordFileReaderWriterImpl implements ICompressedFileReader
         String hashCode="";
         String  temp="";
         while ((character = inputStream.getByte()) != -1) {
-            if(character==32 || character==13 || character==10){
+//            if(character==32 || character==13 || character==10){
+            if ((""+(char)character).matches("^[^a-zA-Z0-9]+$")) {
                 if(temp!="") {
-                    hashCode = (String) hashMap.get(temp);
-                    outputStream.writeBits(hashCode, hashCode.length());
+                    if(hashMap.containsKey(temp)) {
+                        hashCode = (String) hashMap.get(temp);
+                        outputStream.writeBits(hashCode, hashCode.length());
+                    }else{
+                        for(int i=0;i<temp.length();i++){
+                            hashCode=(String) hashMap.get(temp.charAt(i)+"");
+                            outputStream.writeBits(hashCode,hashCode.length());
+                        }
+                    }
                     temp="";
                 }
                 hashCode = (String) hashMap.get((char)character+"");
@@ -28,8 +36,15 @@ public class CompressedWordFileReaderWriterImpl implements ICompressedFileReader
             }
         }
         if(temp!=""){
-            hashCode = (String) hashMap.get(temp);
-            outputStream.writeBits(hashCode, hashCode.length());
+            if(hashMap.containsKey(temp)) {
+                hashCode = (String) hashMap.get(temp);
+                outputStream.writeBits(hashCode, hashCode.length());
+            }else{
+                for(int i=0;i<temp.length();i++){
+                    hashCode=(String) hashMap.get(temp.charAt(i)+"");
+                    outputStream.writeBits(hashCode,hashCode.length());
+                }
+            }
         }
         hashCode = (String) hashMap.get("{^}");
         outputStream.writeBits(hashCode, hashCode.length());

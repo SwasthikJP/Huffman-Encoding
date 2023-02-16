@@ -23,7 +23,7 @@ public class FrequencyBasedHuffmanDecompresserTest {
         if (root1 == null && root2 == null) {
             return true;
         }
-        if (root1.value != root2.value) {
+        if((root1.value!=null && root2.value!=null) && (!root1.value.equals(root2.value))){
             return false;
         }
         Boolean result = true;

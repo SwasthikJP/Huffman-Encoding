@@ -42,5 +42,20 @@ public class IntegerArrayHashMap implements IHashMap {
         return null;
     }
 
+    @Override
+    public void remove(Object key) {
+
+    }
+
+    @Override
+    public Object getMap() {
+        return null;
+    }
+
+    @Override
+    public Boolean containsKey(Object key) {
+        return null;
+    }
+
 
 }

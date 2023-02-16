@@ -6,14 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class StringKeyValueHashMap implements IHashMap {
+public class StrKeyStrValHashMap implements IHashMap {
     Map<String,String> map;
 
-    public StringKeyValueHashMap(Map<String, String> map){
+    public StrKeyStrValHashMap(Map<String, String> map){
         this.map=map;
     }
 
-    public StringKeyValueHashMap(){
+    public StrKeyStrValHashMap(){
         map=new HashMap<>();
     }
 
@@ -24,7 +24,7 @@ public class StringKeyValueHashMap implements IHashMap {
 
     @Override
     public Object get(Object key) {
-        return map.get(key);
+        return map.get(key); //returns null is key exists
     }
 
     @Override
@@ -35,6 +35,21 @@ public class StringKeyValueHashMap implements IHashMap {
     @Override
     public Set<?> keySet() {
         return map.keySet();
+    }
+
+    @Override
+    public void remove(Object key) {
+        map.remove(key);
+    }
+
+    @Override
+    public Object getMap() {
+        return null;
+    }
+
+    @Override
+    public Boolean containsKey(Object key) {
+        return map.containsKey(key);
     }
 
 

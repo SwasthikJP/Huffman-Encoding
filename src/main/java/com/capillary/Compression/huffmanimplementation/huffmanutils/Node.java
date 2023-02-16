@@ -18,9 +18,13 @@ public class Node {
         this.value = null;
         if(leftNode!=null && rightNode!=null){
             this.frequency = leftNode.frequency + rightNode.frequency;
-        }else{
+        }else if(leftNode!=null)
+               this.frequency=leftNode.frequency;
+        else if(rightNode!=null)
+                this.frequency=rightNode.frequency;
+        else
             this.frequency=0;
-        }
+
         this.isLeafNode = false;
         this.left = leftNode;
         this.right = rightNode;

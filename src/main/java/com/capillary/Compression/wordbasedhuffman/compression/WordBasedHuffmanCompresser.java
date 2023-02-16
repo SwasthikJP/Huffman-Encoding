@@ -6,15 +6,14 @@ import com.capillary.Compression.utils.ICompressedFileReaderWriter;
 import com.capillary.Compression.utils.IHashMap;
 import com.capillary.Compression.utils.IHeaderInfoReaderWriter;
 import com.capillary.Compression.wordbasedhuffman.huffmanutils.CompressedWordFileReaderWriterImpl;
+import com.capillary.Compression.wordbasedhuffman.huffmanutils.StrKeyIntValHashMap;
+import com.capillary.Compression.wordbasedhuffman.huffmanutils.StrKeyStrValHashMap;
 import com.capillary.Compression.wordbasedhuffman.huffmanutils.WordHeaderInfoReaderWriter;
-import com.capillary.Compression.wordbasedhuffman.huffmanutils.StringHashMap;
-import com.capillary.Compression.wordbasedhuffman.huffmanutils.StringKeyValueHashMap;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Comparator;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class WordBasedHuffmanCompresser implements IHuffmanCompresser {
     @Override
@@ -82,9 +81,9 @@ public class WordBasedHuffmanCompresser implements IHuffmanCompresser {
     @Override
     public IHashMap generatePrefixCode(Node rootNode) {
         if(rootNode==null){
-            return new StringKeyValueHashMap();
+            return new StrKeyStrValHashMap();
         }
-        IHashMap hashMap = new StringKeyValueHashMap();
+        IHashMap hashMap = new StrKeyStrValHashMap();
 
         if(rootNode.isLeafNode){
             hashMap.put(rootNode.value,"0");
@@ -94,17 +93,54 @@ public class WordBasedHuffmanCompresser implements IHuffmanCompresser {
     }
 
 
+    private IHashMap divideWords(IHashMap hashMap){
+
+        int ignorePerc=100;
+
+        List<Map.Entry<String, Integer> > list =
+                new LinkedList<Map.Entry<String, Integer> >(((Map)hashMap.getMap()).entrySet());
+
+
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer> >() {
+            public int compare(Map.Entry<String, Integer> w1,
+                               Map.Entry<String, Integer> w2)
+            {
+                return (w2.getValue()).compareTo(w1.getValue());
+            }
+        });
+
+
+
+
+        for (int i=ignorePerc* list.size()/100;i<list.size();i++) {
+            Map.Entry<String, Integer> aa=list.get(i);
+            String word= aa.getKey();
+            if(word=="{^}"){
+                continue;
+            }
+            int wordCount= aa.getValue();
+            hashMap.remove(word);
+            for(int j=0;j<word.length();j++){
+                hashMap.put(word.charAt(j)+"",(int)hashMap.get(word.charAt(j)+"")+wordCount);
+            }
+        }
+
+System.out.println(hashMap.getSize());
+        return hashMap;
+    }
+
+
 
     @Override
     public IHashMap calculateCharacterFrequency(InputStream fileInputStream) throws IOException {
         int character;
-        IHashMap frequencyMap=new StringHashMap();
+        IHashMap frequencyMap=new StrKeyIntValHashMap();
         com.capillary.Compression.utils.InputStream inputStream = new com.capillary.Compression.utils.InputStream(fileInputStream);
         String temp="";
         while ((character = inputStream.getByte()) != -1) {
-            if(character==32 || character==10 || character==13){
+            if ((""+(char)character).matches("^[^a-zA-Z0-9]+$")) {
                 if(temp!="") {
-                    frequencyMap.put(temp, (int) frequencyMap.get(character) + 1);
+                    frequencyMap.put(temp, (int) frequencyMap.get(temp) + 1);
                     temp="";
                 }
                 frequencyMap.put((char)character+"",(int)frequencyMap.get((char)character+"")+1);
@@ -114,10 +150,13 @@ public class WordBasedHuffmanCompresser implements IHuffmanCompresser {
             }
         }
         if(temp!=""){
-            frequencyMap.put(temp,(int)frequencyMap.get(character)+1);
+            frequencyMap.put(temp,(int)frequencyMap.get(temp)+1);
         }
         inputStream.close();
         frequencyMap.put("{^}",1);
+
+        frequencyMap.getSize();
         return frequencyMap;
+//        return divideWords(frequencyMap);
     }
 }

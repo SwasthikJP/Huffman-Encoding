@@ -2,16 +2,14 @@ package com.capillary.Compression.wordbasedhuffman.huffmanutils;
 
 import com.capillary.Compression.utils.IHashMap;
 
-import java.awt.desktop.PreferencesEvent;
 import java.util.HashMap;
 import java.util.Set;
-import java.util.logging.Logger;
 
-public class StringHashMap implements IHashMap {
+public class StrKeyIntValHashMap implements IHashMap {
 
     HashMap<String,Integer> map;
 
-    public StringHashMap(){
+    public StrKeyIntValHashMap(){
         map=new HashMap<>();
     }
 
@@ -23,18 +21,38 @@ public class StringHashMap implements IHashMap {
     @Override
     public Object get(Object key) {
         if(map.containsKey(key))
-          return map.get((String) key);
+          return map.get( key);
         return 0;
     }
 
     @Override
     public int getSize() {
+        for(String str:map.keySet()){
+            if(str.length()>3)
+                System.out.println(str.length()+" -- "+str+" --- "+map.get(str));
+        }
+
         return map.size();
     }
 
     @Override
     public Set<?> keySet() {
         return map.keySet();
+    }
+
+    @Override
+    public void remove(Object key) {
+        map.remove(key);
+    }
+
+    @Override
+    public Object getMap() {
+        return map;
+    }
+
+    @Override
+    public Boolean containsKey(Object key) {
+        return null;
     }
 
 

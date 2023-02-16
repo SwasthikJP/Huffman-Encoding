@@ -16,7 +16,7 @@ public class FrequencyBasedHuffmanCompresser implements IHuffmanCompresser {
         InputStream inputStream = new InputStream(fileInputStream);
 
         while ((character = inputStream.getByte()) != -1) {
-            frequencyMap.put(character,(int)frequencyMap.get(character)+1);
+            frequencyMap.put(character,((int)frequencyMap.get(character))+1);
         }
         inputStream.close();
         frequencyMap.put(256,1);

@@ -12,5 +12,11 @@ public interface IHashMap {
 
     Set<?> keySet();
 
+    void remove(Object key);
+
+    Object getMap();
+
+    Boolean containsKey(Object key);
+
 
 }

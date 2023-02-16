@@ -94,11 +94,10 @@ public class FrequencyBasedHuffmanCompresserTest {
         if(root1==null && root2==null){
             return true;
         }
-        if(root1.value!=root2.value || root1.frequency!=root2.frequency){
+        if((root1.value!=null && root2.value!=null) && (!root1.value.equals(root2.value) || root1.frequency!=root2.frequency)){
             return false;
         }
         Boolean result=true;
-//        System.out.println(root1.value);
         if(root1.left!=null){
             if(root2.left==null){
                 result=result&&false;
@@ -113,9 +112,9 @@ public class FrequencyBasedHuffmanCompresserTest {
                 result=result&&dfs(root1.right,root2.right);
             }
         }
-
         return  result;
     }
+
 
     @Test
     public void createHuffmanTree_WhenNormalCharacters_ThenMatchHuffmanTree() throws IOException{
@@ -135,7 +134,8 @@ public class FrequencyBasedHuffmanCompresserTest {
         Node l3=new Node(256,1);
         Node p1=new Node(l1,l3);
         Node expectedRoot=new Node(l2,p1);
-        assertEquals(true, dfs(expectedRoot, frequencyBasedHuffmanCompresser.createHuffmanTree(frequencyMap)));
+      Node rootNode= frequencyBasedHuffmanCompresser.createHuffmanTree(frequencyMap);
+      assertEquals(true, dfs(expectedRoot, frequencyBasedHuffmanCompresser.createHuffmanTree(frequencyMap)));
     }
 
     @Test
