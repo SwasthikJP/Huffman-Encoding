@@ -1,6 +1,6 @@
 package com.capillary.Compression.wordbasedhuffman;
 
-import com.capillary.Compression.huffmanimplementation.huffmanutils.FileHandlerImplementation;
+import com.capillary.Compression.characterbasedhuffman.huffmanutils.FileHandlerImplementation;
 import com.capillary.Compression.utils.IFileHandler;
 import com.capillary.Compression.zipper.IZipperApp;
 

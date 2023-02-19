@@ -1,6 +1,6 @@
 package com.capillary.Compression;
-import com.capillary.Compression.huffmanimplementation.huffmanutils.FileHandlerImplementation;
-import com.capillary.Compression.huffmanimplementation.HuffmanZipperApp;
+import com.capillary.Compression.characterbasedhuffman.huffmanutils.FileHandlerImplementation;
+import com.capillary.Compression.characterbasedhuffman.CharacterHuffmanZipperApp;
 import com.capillary.Compression.utils.IFileHandler;
 import com.capillary.Compression.zipper.IZipperApp;
 
@@ -12,7 +12,7 @@ public class Main {
 
         int choice;
         Scanner scanner = new Scanner(System.in);
-        IZipperApp iApp = new HuffmanZipperApp();
+        IZipperApp iApp = new CharacterHuffmanZipperApp();
         String filePath;
 
         while (true) {
