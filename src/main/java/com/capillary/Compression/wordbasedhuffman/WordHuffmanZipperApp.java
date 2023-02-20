@@ -2,9 +2,7 @@ package com.capillary.Compression.wordbasedhuffman;
 
 import com.capillary.Compression.commonhuffmaninterfaces.IHuffmanCompresser;
 import com.capillary.Compression.commonhuffmaninterfaces.IHuffmanDecompresser;
-import com.capillary.Compression.utils.Node;
-import com.capillary.Compression.utils.IFileHandler;
-import com.capillary.Compression.utils.IHashMap;
+import com.capillary.Compression.utils.*;
 import com.capillary.Compression.wordbasedhuffman.compression.WordBasedHuffmanCompresser;
 import com.capillary.Compression.wordbasedhuffman.decompression.WordBasedHuffmanDecompresser;
 import com.capillary.Compression.zipper.IZipperApp;
@@ -43,11 +41,12 @@ public class WordHuffmanZipperApp implements IZipperApp {
 //            dfs(rootNode);
             IHashMap hashMap= huffmanCompresser.generatePrefixCode(rootNode);
 
+            IZipperStats zipperStats=new FileZipperStats();
+            zipperStats.calculateAverageCodeLength(frequencyMap,hashMap);
 
             huffmanCompresser.encodeFile(fileHandler.getInputStream(),fileHandler.getOutputStream(),hashMap, rootNode);
 
-//            compressionStats.stopTimer();
-//            compressionStats.displayCompressionStats(filePath, compressFilePath);
+
         }
         catch (Exception e){
             e.printStackTrace();
@@ -58,10 +57,14 @@ public class WordHuffmanZipperApp implements IZipperApp {
     public void decompress(IFileHandler fileHandler) {
         try {
 
-
+//        IZipperStats compressionStats = new FileZipperStats();
+//        compressionStats.startTimer();
             Node rootNode=(Node)huffmanDecompresser.createHuffmanTree(fileHandler.getInputStream());
 
             huffmanDecompresser.decodeFile(fileHandler.getOutputStream(),rootNode);
+
+            // compressionStats.stopTimer();
+//            compressionStats.displayCompressionStats(filePath, compressFilePath);
 
         }
         catch (Exception e){

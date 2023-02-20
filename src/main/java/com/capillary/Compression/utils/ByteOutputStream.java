@@ -8,11 +8,13 @@ public class ByteOutputStream {
     int buffer;
     int bufferSize;
     BufferedOutputStream fileOutputStream;
+    long totalByteWritten;
 
     public ByteOutputStream(java.io.OutputStream outputStream){
         fileOutputStream = new BufferedOutputStream(outputStream, 1000000);
         buffer = 0;
         bufferSize = 0;
+        totalByteWritten=0;
     }
 
     public void flushBuffer() throws IOException{
@@ -21,6 +23,7 @@ public class ByteOutputStream {
                 fileOutputStream.write(buffer);
                 buffer = 0;
                 bufferSize = 0;
+                totalByteWritten++;
             }
         }
 
@@ -55,6 +58,11 @@ public class ByteOutputStream {
     public void writeObject(Object obj)throws IOException{
         ObjectOutputStream outputStream=new ObjectOutputStream(fileOutputStream);
         outputStream.writeObject(obj);
+    }
+
+    public long totalByteWritten(){
+//       System.out.println("Total byte written is ");
+        return totalByteWritten;
     }
 
 

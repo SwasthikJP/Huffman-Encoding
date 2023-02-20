@@ -27,19 +27,6 @@ public class CharacterHuffmanZipperApp implements IZipperApp {
 
 
 
-
-//    public double calculateAverageCode(IFrequencyMap characterFreq,String[] hashCode){
-//        double totalCharacter=0;
-//        double result=0;
-//        for(int i=0;i<characterFreq.getSize();i++){
-//            if(characterFreq.get(i)!=0) {
-//                totalCharacter += characterFreq.get(i);
-//                result+=characterFreq.get(i)*hashCode[i].length();
-//            }
-//        }
-//        return result/totalCharacter;
-//    }
-
     @Override
     public void compress(IFileHandler fileHandler) {
 

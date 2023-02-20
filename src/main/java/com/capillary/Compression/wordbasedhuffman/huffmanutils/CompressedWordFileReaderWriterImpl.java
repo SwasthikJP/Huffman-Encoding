@@ -54,9 +54,8 @@ public class CompressedWordFileReaderWriterImpl implements ICompressedFileReader
         String hashCode="";
         String  temp="";
         while ((character = byteInputStream.getByte()) != -1) {
-//            if(character==32 || character==13 || character==10){
-            if ((""+(char)character).matches("^[^a-zA-Z0-9]+$")) { //ignore alphaNumeric characters
-                if(temp!="") {
+              if (!Character.isLetterOrDigit((char)character)) { //ignore alphaNumeric characters
+//                if(temp!="") {
                     if(hashMap.containsKey(temp)) {
                         hashCode = (String) hashMap.get(temp);
                         byteOutputStream.writeBits(hashCode, hashCode.length());
@@ -67,7 +66,7 @@ public class CompressedWordFileReaderWriterImpl implements ICompressedFileReader
                         }
                     }
                     temp="";
-                }
+//                }
                 hashCode = (String) hashMap.get((char)character+"");
                 byteOutputStream.writeBits(hashCode, hashCode.length());
             }else {
