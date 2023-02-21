@@ -17,7 +17,7 @@ public class App {
         zipperApp.compress(fileHandler);
                     compressionStats.stopTimer();
             compressionStats.displayCompressionStats("/home/swasthikjp/Downloads/pg100.txt", "/home/swasthikjp/Downloads/pg100.huf.txt");
-//        System.out.println("hhh");
+
         IFileHandler fileHandler2=new FileHandlerImplementation("/home/swasthikjp/Downloads/pg100.huf.txt","/home/swasthikjp/Downloads/pg100.unhuf.txt");
 //        IFileHandler fileHandler2=new FileHandlerImplementation("test.huf.txt","test.unhuf.txt");
 

@@ -54,6 +54,7 @@ public class CompressedWordFileReaderWriterImpl implements ICompressedFileReader
         String hashCode="";
         String  temp="";
         while ((character = byteInputStream.getByte()) != -1) {
+
               if (!Character.isLetterOrDigit((char)character)) { //ignore alphaNumeric characters
 //                if(temp!="") {
                     if(hashMap.containsKey(temp)) {

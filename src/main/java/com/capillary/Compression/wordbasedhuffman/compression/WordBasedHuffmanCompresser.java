@@ -39,6 +39,7 @@ public class WordBasedHuffmanCompresser implements IHuffmanCompresser {
         ByteInputStream byteInputStream = new ByteInputStream(fileInputStream);
         String temp="";
         while ((character = byteInputStream.getByte()) != -1) {
+
             if (!Character.isLetterOrDigit((char)character)) {
                 if(temp!="") {
                     frequencyMap.put(temp, (int) frequencyMap.getOrDefault(temp,0) + 1);
@@ -59,7 +60,8 @@ public class WordBasedHuffmanCompresser implements IHuffmanCompresser {
         frequencyMap.getSize();
 //        return frequencyMap;
         WordDivision wordDivision=new WordDivision();
-       return wordDivision.divideWords(frequencyMap);
+
+       return wordDivision.divideWords(frequencyMap, wordDivision.calcOptimalPercOfWords(frequencyMap));
     }
 
     private Node combineSubTrees(PriorityQueue<Node> pq) {
@@ -109,6 +111,7 @@ public class WordBasedHuffmanCompresser implements IHuffmanCompresser {
         if(rootNode==null){
             return new HashMapImpl();
         }
+
         IHashMap hashMap = new HashMapImpl();
 
         if(rootNode.isLeafNode){

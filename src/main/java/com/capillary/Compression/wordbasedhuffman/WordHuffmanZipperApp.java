@@ -9,7 +9,6 @@ import com.capillary.Compression.zipper.IZipperApp;
 
 public class WordHuffmanZipperApp implements IZipperApp {
 
-
     private  IHuffmanCompresser huffmanCompresser;
     private  IHuffmanDecompresser huffmanDecompresser;
 
@@ -32,13 +31,10 @@ public class WordHuffmanZipperApp implements IZipperApp {
     public void compress(IFileHandler fileHandler) {
         try {
 
-
-
             IHashMap frequencyMap=huffmanCompresser.calculateCharacterFrequency(fileHandler.getInputStream());
 
-
             Node rootNode=huffmanCompresser.createHuffmanTree(frequencyMap);
-//            dfs(rootNode);
+
             IHashMap hashMap= huffmanCompresser.generatePrefixCode(rootNode);
 
             IZipperStats zipperStats=new FileZipperStats();
@@ -57,14 +53,11 @@ public class WordHuffmanZipperApp implements IZipperApp {
     public void decompress(IFileHandler fileHandler) {
         try {
 
-//        IZipperStats compressionStats = new FileZipperStats();
-//        compressionStats.startTimer();
+
             Node rootNode=(Node)huffmanDecompresser.createHuffmanTree(fileHandler.getInputStream());
 
             huffmanDecompresser.decodeFile(fileHandler.getOutputStream(),rootNode);
 
-            // compressionStats.stopTimer();
-//            compressionStats.displayCompressionStats(filePath, compressFilePath);
 
         }
         catch (Exception e){

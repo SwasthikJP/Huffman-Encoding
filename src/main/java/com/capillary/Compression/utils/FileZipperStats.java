@@ -34,8 +34,8 @@ public class FileZipperStats implements IZipperStats {
 
 //        System.out.println("Compressed file path is " + compressedFilePath);
 
-        System.out.println("\r \nTime taken for compression: " + duration.toHoursPart() + " : "
-                + duration.toMinutesPart() + " : " + duration.toSecondsPart() + " : " + duration.toMillisPart());
+        System.out.println("\r \nTime taken for compression: " +
+                duration.toMinutesPart() + " : " + duration.toSecondsPart() + " : " + duration.toMillisPart()+" ms");
 
            File originalfile = new File(inputFilePath);
            File compressedFile = new File(compressedFilePath);
