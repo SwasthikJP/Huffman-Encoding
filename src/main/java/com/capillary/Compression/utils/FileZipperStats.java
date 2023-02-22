@@ -86,6 +86,13 @@ public class FileZipperStats implements IZipperStats {
         return totalWordLength/frequencyMap.getSize();
     }
 
+    @Override
+    public void displayTimeTaken(String methodName) {
+
+        Duration duration = Duration.ofNanos(elapsedTime);
+        System.out.println("Time taken for method: "+methodName+"() is "+duration.toSecondsPart() + " : " + duration.toMillisPart()+" ms");
+    }
+
 
     @Override
     public void displayDecompressionStats(String compressedFilePath, String decompressedFilePath)throws NullPointerException,SecurityException {

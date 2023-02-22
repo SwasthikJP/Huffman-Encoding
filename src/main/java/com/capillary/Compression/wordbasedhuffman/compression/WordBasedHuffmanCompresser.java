@@ -4,10 +4,7 @@ import com.capillary.Compression.commonhuffmaninterfaces.IHuffmanCompresser;
 import com.capillary.Compression.utils.*;
 import com.capillary.Compression.commonhuffmaninterfaces.ICompressedFileReaderWriter;
 import com.capillary.Compression.commonhuffmaninterfaces.IHeaderInfoReaderWriter;
-import com.capillary.Compression.wordbasedhuffman.huffmanutils.CompressedWordFileReaderWriterImpl;
-import com.capillary.Compression.wordbasedhuffman.huffmanutils.HashMapImpl;
-import com.capillary.Compression.wordbasedhuffman.huffmanutils.WordDivision;
-import com.capillary.Compression.wordbasedhuffman.huffmanutils.WordHeaderInfoReaderWriter;
+import com.capillary.Compression.wordbasedhuffman.huffmanutils.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,14 +27,16 @@ public class WordBasedHuffmanCompresser implements IHuffmanCompresser {
         this.compressedFileReaderWriter=compressedFileReaderWriter;
     }
 
-
-
     @Override
     public IHashMap calculateCharacterFrequency(InputStream fileInputStream) throws IOException {
+        IZipperStats zipperStats=new FileZipperStats();
+        zipperStats.startTimer();
         int character;
         IHashMap frequencyMap=new HashMapImpl();
         ByteInputStream byteInputStream = new ByteInputStream(fileInputStream);
         String temp="";
+        CalcFrequencyMap calcFrequencyMap=new CalcFrequencyMap();
+        calcFrequencyMap.createFrequencyMap(fileInputStream);
         while ((character = byteInputStream.getByte()) != -1) {
 
             if (!Character.isLetterOrDigit((char)character)) {
@@ -57,11 +56,12 @@ public class WordBasedHuffmanCompresser implements IHuffmanCompresser {
         byteInputStream.close();
         frequencyMap.put("{^}",1);
 
-        frequencyMap.getSize();
-//        return frequencyMap;
-        WordDivision wordDivision=new WordDivision();
+//        frequencyMap.getSize();
+        zipperStats.stopTimer();
+        zipperStats.displayTimeTaken("calcCharacterFrequency");
 
-       return wordDivision.divideWords(frequencyMap, wordDivision.calcOptimalPercOfWords(frequencyMap));
+        WordDivision wordDivision=new WordDivision();
+       return wordDivision.optimalWordDivision(frequencyMap);
     }
 
     private Node combineSubTrees(PriorityQueue<Node> pq) {

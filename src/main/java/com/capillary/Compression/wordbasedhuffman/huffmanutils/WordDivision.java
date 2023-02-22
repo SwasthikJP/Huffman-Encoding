@@ -12,6 +12,7 @@ import java.util.*;
 public class WordDivision {
 
     HashMap<Object,Object> ff;
+    IHashMap optimalFrequencyMap;
 
     private long dfs(Node node){
         if(node==null){
@@ -50,7 +51,63 @@ public class WordDivision {
 
 
 
-    public double calcOptimalPercOfWords(IHashMap hashMap)throws IOException{
+    public IHashMap optimalWordDivision(IHashMap hashMap)throws IOException{
+IZipperStats zipperStats=new FileZipperStats();
+zipperStats.startTimer();
+        List<Map.Entry<String, Integer> > frequencyList =
+                new LinkedList<Map.Entry<String, Integer> >(((Map)hashMap.getMap()).entrySet());
+
+
+        Collections.sort(frequencyList, new Comparator<Map.Entry<String, Integer> >() {
+            public int compare(Map.Entry<String, Integer> w1,
+                               Map.Entry<String, Integer> w2)
+            {
+                return (w2.getValue()).compareTo(w1.getValue());
+            }
+        });
+
+        int[] percList={100,70,40,-1};
+
+        CalcBestPerc[] calcBestPercs=new CalcBestPerc[percList.length-1];
+        Thread[] thread=new Thread[percList.length-1];
+        for(int i=0;i<percList.length-1;i++){
+            calcBestPercs[i]=new CalcBestPerc(frequencyList,percList[i+1]+1,percList[i]);
+            thread[i]=new Thread(calcBestPercs[i]);
+            thread[i].start();
+        }
+
+        long minCompressionSize=Integer.MAX_VALUE;
+        int optimalPerc=100;
+
+try{
+
+        for(int i=0;i<thread.length;i++){
+            thread[i].join();
+        }
+
+    } catch (InterruptedException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
+
+   for(int i=0;i<calcBestPercs.length;i++){
+       if(calcBestPercs[i].getMinCompressionSize()< minCompressionSize){
+           minCompressionSize=calcBestPercs[i].getMinCompressionSize();
+           optimalPerc=calcBestPercs[i].getOptimalPerc();
+           optimalFrequencyMap=calcBestPercs[i].getOptimalFrequencyMap();
+       }
+   }
+
+
+   System.out.println("Optimal fileSize is "+minCompressionSize+" bytes");
+   System.out.println("Optimal Word perc is "+optimalPerc+"%");
+zipperStats.stopTimer();
+zipperStats.displayTimeTaken("optimalWordDivision");
+ return optimalFrequencyMap;
+    }
+
+
+    public IHashMap calcOptimalPercOfWords(IHashMap hashMap)throws IOException{
 
         List<Map.Entry<String, Integer> > frequencyList =
                 new LinkedList<Map.Entry<String, Integer> >(((Map)hashMap.getMap()).entrySet());
@@ -114,42 +171,8 @@ public class WordDivision {
         System.out.println("Optimal percentage is "+optimalPerc+"%");
         System.out.println("Optimal fileSize is "+minCompressionSize+" bytes");
 
-       return optimalPerc;
+       return optimalFrequencyMap;
     }
 
-    public IHashMap divideWords(IHashMap hashMap,double perc){
-
-//        perc=58;//60% 59.44% 2.32Mb //100% 59.02% 2.34Mb
-
-        List<Map.Entry<String, Integer> > list =
-                new LinkedList<Map.Entry<String, Integer> >(((Map)hashMap.getMap()).entrySet());
-
-
-        Collections.sort(list, new Comparator<Map.Entry<String, Integer> >() {
-            public int compare(Map.Entry<String, Integer> w1,
-                               Map.Entry<String, Integer> w2)
-            {
-                return (w2.getValue()).compareTo(w1.getValue());
-            }
-        });
-
-
-
-        for (int i=(int)perc* list.size()/100;i<list.size();i++) {
-            Map.Entry<String, Integer> aa=list.get(i);
-            String word= aa.getKey();
-//            if(word=="{^}" || word.length()>avgWordLen){
-            if(word=="{^}"){
-                continue;
-            }
-            int wordCount= aa.getValue();
-            hashMap.remove(word);
-            for(int j=0;j<word.length();j++){
-                hashMap.put(word.charAt(j)+"",(int)hashMap.getOrDefault(word.charAt(j)+"",0)+wordCount);
-            }
-        }
-
-        return hashMap;
-    }
 
 }

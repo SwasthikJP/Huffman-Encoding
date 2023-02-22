@@ -30,18 +30,25 @@ public class WordHuffmanZipperApp implements IZipperApp {
     @Override
     public void compress(IFileHandler fileHandler) {
         try {
-
+        IZipperStats zipperStats=new FileZipperStats();
             IHashMap frequencyMap=huffmanCompresser.calculateCharacterFrequency(fileHandler.getInputStream());
 
+            zipperStats.startTimer();
             Node rootNode=huffmanCompresser.createHuffmanTree(frequencyMap);
+            zipperStats.stopTimer();
+            zipperStats.displayTimeTaken("createHuffmanTree");
 
+            zipperStats.startTimer();
             IHashMap hashMap= huffmanCompresser.generatePrefixCode(rootNode);
+            zipperStats.stopTimer();
+            zipperStats.displayTimeTaken("generatePrefixCode");
 
-            IZipperStats zipperStats=new FileZipperStats();
+
             zipperStats.calculateAverageCodeLength(frequencyMap,hashMap);
-
+           zipperStats.startTimer();
             huffmanCompresser.encodeFile(fileHandler.getInputStream(),fileHandler.getOutputStream(),hashMap, rootNode);
-
+            zipperStats.stopTimer();
+            zipperStats.displayTimeTaken("encodeFile");
 
         }
         catch (Exception e){
@@ -53,11 +60,15 @@ public class WordHuffmanZipperApp implements IZipperApp {
     public void decompress(IFileHandler fileHandler) {
         try {
 
-
+            IZipperStats zipperStats=new FileZipperStats();
+            zipperStats.startTimer();
             Node rootNode=(Node)huffmanDecompresser.createHuffmanTree(fileHandler.getInputStream());
-
+            zipperStats.stopTimer();
+            zipperStats.displayTimeTaken("createHuffmanTree");
+            zipperStats.startTimer();
             huffmanDecompresser.decodeFile(fileHandler.getOutputStream(),rootNode);
-
+            zipperStats.stopTimer();
+            zipperStats.displayTimeTaken("decodeFile");
 
         }
         catch (Exception e){

@@ -17,5 +17,7 @@ public interface IZipperStats {
 
     long calcAverageWordLength(IHashMap frequencyMap);
 
+    void displayTimeTaken(String methodName);
+
 
 }
