@@ -1,8 +1,6 @@
 package com.capillary.Compression.characterbasedhuffman;
 
-import com.capillary.Compression.utils.Node;
-import com.capillary.Compression.utils.IFileHandler;
-import com.capillary.Compression.utils.IHashMap;
+import com.capillary.Compression.utils.*;
 import com.capillary.Compression.zipper.IZipperApp;
 import com.capillary.Compression.characterbasedhuffman.compression.CharacterBasedHuffmanCompresser;
 import com.capillary.Compression.commonhuffmaninterfaces.IHuffmanCompresser;
@@ -30,8 +28,7 @@ public class CharacterHuffmanZipperApp implements IZipperApp {
     @Override
     public void compress(IFileHandler fileHandler) {
 
-//        IZipperStats compressionStats = new FileZipperStats();
-//        compressionStats.startTimer();
+
         try {
 
 
@@ -44,8 +41,7 @@ public class CharacterHuffmanZipperApp implements IZipperApp {
 
             huffmanCompresser.encodeFile(fileHandler.getInputStream(),fileHandler.getOutputStream(),hashMap, rootNode);
 
-//            compressionStats.stopTimer();
-//            compressionStats.displayCompressionStats(filePath, compressFilePath);
+
         }
         catch (Exception e){
             e.printStackTrace();
@@ -55,8 +51,7 @@ public class CharacterHuffmanZipperApp implements IZipperApp {
     @Override
     public void decompress(IFileHandler fileHandler) {
 
-//        IZipperStats compressionStats = new FileZipperStats();
-//        compressionStats.startTimer();
+
         try {
 
 
@@ -65,8 +60,6 @@ public class CharacterHuffmanZipperApp implements IZipperApp {
 
             huffmanDecompresser.decodeFile(fileHandler.getOutputStream(),rootNode);
 
-//            compressionStats.stopTimer();
-//            compressionStats.displayDecompressionStats(compressFilePath, decompressFilePath);
 
         }
         catch (Exception e){

@@ -5,6 +5,7 @@ import com.capillary.Compression.commonhuffmaninterfaces.IHuffmanDecompresser;
 import com.capillary.Compression.utils.*;
 import com.capillary.Compression.wordbasedhuffman.compression.WordBasedHuffmanCompresser;
 import com.capillary.Compression.wordbasedhuffman.decompression.WordBasedHuffmanDecompresser;
+import com.capillary.Compression.wordbasedhuffman.huffmanutils.CalcFrequencyMap;
 import com.capillary.Compression.zipper.IZipperApp;
 
 public class WordHuffmanZipperApp implements IZipperApp {
@@ -33,6 +34,11 @@ public class WordHuffmanZipperApp implements IZipperApp {
         IZipperStats zipperStats=new FileZipperStats();
             IHashMap frequencyMap=huffmanCompresser.calculateCharacterFrequency(fileHandler.getInputStream());
 
+            zipperStats.startTimer();
+            CalcFrequencyMap calcFrequencyMap=new CalcFrequencyMap();
+            calcFrequencyMap.createFrequencyMap(fileHandler.getInputStream());
+            zipperStats.stopTimer();
+            zipperStats.displayTimeTaken("thread freq map");
             zipperStats.startTimer();
             Node rootNode=huffmanCompresser.createHuffmanTree(frequencyMap);
             zipperStats.stopTimer();

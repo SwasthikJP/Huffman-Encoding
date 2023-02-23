@@ -35,8 +35,7 @@ public class WordBasedHuffmanCompresser implements IHuffmanCompresser {
         IHashMap frequencyMap=new HashMapImpl();
         ByteInputStream byteInputStream = new ByteInputStream(fileInputStream);
         String temp="";
-        CalcFrequencyMap calcFrequencyMap=new CalcFrequencyMap();
-        calcFrequencyMap.createFrequencyMap(fileInputStream);
+
         while ((character = byteInputStream.getByte()) != -1) {
 
             if (!Character.isLetterOrDigit((char)character)) {
@@ -56,12 +55,17 @@ public class WordBasedHuffmanCompresser implements IHuffmanCompresser {
         byteInputStream.close();
         frequencyMap.put("{^}",1);
 
-//        frequencyMap.getSize();
+       System.out.println("calc Freq method, map size is "+frequencyMap.getSize());
         zipperStats.stopTimer();
         zipperStats.displayTimeTaken("calcCharacterFrequency");
 
-        WordDivision wordDivision=new WordDivision();
-       return wordDivision.optimalWordDivision(frequencyMap);
+        SimulatedAnnealing simulatedAnnealing=new SimulatedAnnealing();
+      return simulatedAnnealing.calculateIdealSplit(frequencyMap);
+//      zipperStats.stopTimer();
+//      zipperStats.displayTimeTaken("simulated annealing");
+//    return frequencyMap;
+//        WordDivision wordDivision=new WordDivision();
+//       return wordDivision.optimalWordDivision(frequencyMap);
     }
 
     private Node combineSubTrees(PriorityQueue<Node> pq) {

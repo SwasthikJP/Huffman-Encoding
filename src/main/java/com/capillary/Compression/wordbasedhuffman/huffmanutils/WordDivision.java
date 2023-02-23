@@ -8,6 +8,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class WordDivision {
 
@@ -50,7 +54,6 @@ public class WordDivision {
     }
 
 
-
     public IHashMap optimalWordDivision(IHashMap hashMap)throws IOException{
 IZipperStats zipperStats=new FileZipperStats();
 zipperStats.startTimer();
@@ -69,26 +72,29 @@ zipperStats.startTimer();
         int[] percList={100,70,40,-1};
 
         CalcBestPerc[] calcBestPercs=new CalcBestPerc[percList.length-1];
-        Thread[] thread=new Thread[percList.length-1];
+//        Thread[] thread=new Thread[percList.length-1];
+
+        ExecutorService executorService= Executors.newFixedThreadPool(percList.length-1);
+
         for(int i=0;i<percList.length-1;i++){
             calcBestPercs[i]=new CalcBestPerc(frequencyList,percList[i+1]+1,percList[i]);
-            thread[i]=new Thread(calcBestPercs[i]);
-            thread[i].start();
+            executorService.execute(calcBestPercs[i]);
         }
 
         long minCompressionSize=Integer.MAX_VALUE;
         int optimalPerc=100;
 
-try{
 
-        for(int i=0;i<thread.length;i++){
-            thread[i].join();
+    executorService.shutdown();
+
+        try {
+            if (!executorService.awaitTermination(6000, TimeUnit.SECONDS)) {
+                executorService.shutdownNow();
+            }
+        } catch (InterruptedException ex) {
+            executorService.shutdownNow();
+            Thread.currentThread().interrupt();
         }
-
-    } catch (InterruptedException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-    }
 
    for(int i=0;i<calcBestPercs.length;i++){
        if(calcBestPercs[i].getMinCompressionSize()< minCompressionSize){
@@ -101,9 +107,10 @@ try{
 
    System.out.println("Optimal fileSize is "+minCompressionSize+" bytes");
    System.out.println("Optimal Word perc is "+optimalPerc+"%");
-zipperStats.stopTimer();
-zipperStats.displayTimeTaken("optimalWordDivision");
- return optimalFrequencyMap;
+   zipperStats.stopTimer();
+   zipperStats.displayTimeTaken("optimalWordDivision");
+   return optimalFrequencyMap;
+
     }
 
 
