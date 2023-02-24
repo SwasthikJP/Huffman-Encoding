@@ -35,8 +35,8 @@ public class WordHeaderInfoReaderWriter implements IHeaderInfoReaderWriter {
             byteOutputStream.writeBit(1);
             String nodeValue=(String) node.value;
             byteOutputStream.writeBits(nodeValue.length(),8);
-            for(int i=0;i<nodeValue.length();i++){
-                byteOutputStream.writeBits((int)nodeValue.charAt(i), 8);
+            for(Character c:nodeValue.toCharArray()){
+                byteOutputStream.writeBits((int)c, 8);
             }
         } else {
             byteOutputStream.writeBit(0);

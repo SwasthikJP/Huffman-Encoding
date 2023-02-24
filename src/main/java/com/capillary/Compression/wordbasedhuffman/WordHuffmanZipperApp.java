@@ -32,14 +32,16 @@ public class WordHuffmanZipperApp implements IZipperApp {
     public void compress(IFileHandler fileHandler) {
         try {
         IZipperStats zipperStats=new FileZipperStats();
+//        zipperStats.startTimer();
+//            CalcFrequencyMap calcFrequencyMap=new CalcFrequencyMap();
+//            calcFrequencyMap.createFrequencyMap(fileHandler.getInputStream());
+//            zipperStats.stopTimer();
+//            zipperStats.displayTimeTaken("thread freq map");
+
             IHashMap frequencyMap=huffmanCompresser.calculateCharacterFrequency(fileHandler.getInputStream());
 
             zipperStats.startTimer();
-            CalcFrequencyMap calcFrequencyMap=new CalcFrequencyMap();
-            calcFrequencyMap.createFrequencyMap(fileHandler.getInputStream());
-            zipperStats.stopTimer();
-            zipperStats.displayTimeTaken("thread freq map");
-            zipperStats.startTimer();
+
             Node rootNode=huffmanCompresser.createHuffmanTree(frequencyMap);
             zipperStats.stopTimer();
             zipperStats.displayTimeTaken("createHuffmanTree");

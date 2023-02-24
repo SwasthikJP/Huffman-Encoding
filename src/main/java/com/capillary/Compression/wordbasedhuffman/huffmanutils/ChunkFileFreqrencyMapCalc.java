@@ -1,7 +1,9 @@
 package com.capillary.Compression.wordbasedhuffman.huffmanutils;
 
 import com.capillary.Compression.utils.ByteInputStream;
+import com.capillary.Compression.utils.FileZipperStats;
 import com.capillary.Compression.utils.IHashMap;
+import com.capillary.Compression.utils.IZipperStats;
 
 import java.io.InputStream;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,7 +28,8 @@ public class ChunkFileFreqrencyMapCalc implements Runnable{
            frequencyMap = new HashMapImpl();
             ByteInputStream byteInputStream = new ByteInputStream(inputStream);
             String temp = "";
-
+            IZipperStats zipperStats=new FileZipperStats();
+            zipperStats.startTimer();
             while ((character = byteInputStream.getByte()) != -1) {
 
                 if (!Character.isLetterOrDigit((char) character)) {
@@ -47,6 +50,8 @@ public class ChunkFileFreqrencyMapCalc implements Runnable{
                 concurrentHashMap.put(temp, (int) concurrentHashMap.getOrDefault(temp, 0) + 1);
             }
             byteInputStream.close();
+            zipperStats.stopTimer();
+            zipperStats.displayTimeTaken("chunk file");
 
         }catch (Exception e){
             System.out.println(e.getMessage());

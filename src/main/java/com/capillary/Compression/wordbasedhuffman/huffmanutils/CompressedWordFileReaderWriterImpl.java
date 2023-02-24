@@ -29,8 +29,8 @@ public class CompressedWordFileReaderWriterImpl implements ICompressedFileReader
                     return true;
                 }
                 String word=(String) node.value;
-                for(int i=0;i<word.length();i++){
-                    byteOutputStream.writeByte(word.charAt(i));}
+                for(Character c:word.toCharArray()){
+                    byteOutputStream.writeByte(c);}
                 node =(Node) rootNode;
             }
             if (bit == 0) {
@@ -61,8 +61,8 @@ public class CompressedWordFileReaderWriterImpl implements ICompressedFileReader
                         hashCode = (String) hashMap.get(temp);
                         byteOutputStream.writeBits(hashCode, hashCode.length());
                     }else{
-                        for(int i=0;i<temp.length();i++){
-                            hashCode=(String) hashMap.get(temp.charAt(i)+"");
+                        for(Character c:temp.toCharArray()){
+                            hashCode=(String) hashMap.get(c+"");
                             byteOutputStream.writeBits(hashCode,hashCode.length());
                         }
                     }
@@ -79,8 +79,8 @@ public class CompressedWordFileReaderWriterImpl implements ICompressedFileReader
                 hashCode = (String) hashMap.get(temp);
                 byteOutputStream.writeBits(hashCode, hashCode.length());
             }else{
-                for(int i=0;i<temp.length();i++){
-                    hashCode=(String) hashMap.get(temp.charAt(i)+"");
+                for(Character c:temp.toCharArray()){
+                    hashCode=(String) hashMap.get(c+"");
                     byteOutputStream.writeBits(hashCode,hashCode.length());
                 }
             }

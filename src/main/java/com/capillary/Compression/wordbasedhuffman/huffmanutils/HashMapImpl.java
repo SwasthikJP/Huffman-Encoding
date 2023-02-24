@@ -18,7 +18,6 @@ public class HashMapImpl implements IHashMap {
         this.map=map;
     }
 
-
     @Override
     public void put(Object key, Object value) {
      map.put(key,value);
