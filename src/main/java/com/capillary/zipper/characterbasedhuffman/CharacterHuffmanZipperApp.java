@@ -28,16 +28,11 @@ public class CharacterHuffmanZipperApp implements IZipperApp {
     @Override
     public void compress(IFileHandler fileHandler) {
 
-
         try {
-
 
             IHashMap frequencyMap=huffmanCompresser.calculateCharacterFrequency(fileHandler.getInputStream());
             Node rootNode=huffmanCompresser.createHuffmanTree(frequencyMap);
             IHashMap hashMap= huffmanCompresser.generatePrefixCode(rootNode);
-
-//            System.out.println("average code length is "+calculateAverageCode(frequencyMap,hashCode));
-
 
             huffmanCompresser.encodeFile(fileHandler.getInputStream(),fileHandler.getOutputStream(),hashMap, rootNode);
 
@@ -53,8 +48,6 @@ public class CharacterHuffmanZipperApp implements IZipperApp {
 
 
         try {
-
-
 
            Node rootNode=(Node)huffmanDecompresser.createHuffmanTree(fileHandler.getInputStream());
 

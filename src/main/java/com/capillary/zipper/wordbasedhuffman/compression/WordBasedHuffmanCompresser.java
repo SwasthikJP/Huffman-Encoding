@@ -18,8 +18,8 @@ public class WordBasedHuffmanCompresser implements IHuffmanCompresser {
 
 
     public WordBasedHuffmanCompresser(){
-       headerInfoReaderWriter=new WordHeaderInfoReaderWriter();
-       compressedFileReaderWriter=new CompressedWordFileReaderWriterImpl();
+        headerInfoReaderWriter=new WordHeaderInfoReaderWriter();
+        compressedFileReaderWriter=new CompressedWordFileReaderWriterImpl();
     }
 
     public WordBasedHuffmanCompresser(IHeaderInfoReaderWriter headerInfoReaderWriter,ICompressedFileReaderWriter compressedFileReaderWriter){
@@ -126,6 +126,7 @@ public class WordBasedHuffmanCompresser implements IHuffmanCompresser {
         }
         IZipperStats zipperStats=new FileZipperStats();
         zipperStats.calcHeaderSize(byteOutputStream);
+
 
         if(!compressedFileReaderWriter.writeCompressedFile(byteInputStream, byteOutputStream, hashMap)){
             throw new IOException("Invalid Prefix hashMap");

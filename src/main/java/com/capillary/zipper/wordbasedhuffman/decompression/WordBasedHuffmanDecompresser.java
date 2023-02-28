@@ -6,6 +6,7 @@ import com.capillary.zipper.utils.ByteOutputStream;
 import com.capillary.zipper.utils.Node;
 import com.capillary.zipper.commonhuffmaninterfaces.ICompressedFileReaderWriter;
 import com.capillary.zipper.commonhuffmaninterfaces.IHeaderInfoReaderWriter;
+import com.capillary.zipper.wordbasedhuffman.huffmanutils.Checksum;
 import com.capillary.zipper.wordbasedhuffman.huffmanutils.CompressedWordFileReaderWriterImpl;
 import com.capillary.zipper.wordbasedhuffman.huffmanutils.WordHeaderInfoReaderWriter;
 
@@ -17,6 +18,8 @@ public class WordBasedHuffmanDecompresser implements IHuffmanDecompresser {
     private ByteInputStream byteInputStream;
     private IHeaderInfoReaderWriter headerInfoReaderWriter;
     private ICompressedFileReaderWriter compressedFileReaderWriter;
+
+
 
     public WordBasedHuffmanDecompresser(){
         headerInfoReaderWriter=new WordHeaderInfoReaderWriter();
@@ -37,8 +40,7 @@ public class WordBasedHuffmanDecompresser implements IHuffmanDecompresser {
     @Override
     public Object createHuffmanTree(InputStream fileInputStream) throws IOException {
             byteInputStream = new ByteInputStream(fileInputStream);
-
-            return  headerInfoReaderWriter.readHeaderInfo(byteInputStream);
+           return headerInfoReaderWriter.readHeaderInfo(byteInputStream);
     }
 
     @Override
@@ -50,4 +52,8 @@ public class WordBasedHuffmanDecompresser implements IHuffmanDecompresser {
 
         return compressedFileReaderWriter.readCompressedFile(byteInputStream, byteOutputStream,(Node)node);
     }
+
+
+
+
 }

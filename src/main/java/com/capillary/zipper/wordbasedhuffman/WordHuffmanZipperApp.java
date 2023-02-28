@@ -5,25 +5,33 @@ import com.capillary.zipper.commonhuffmaninterfaces.IHuffmanDecompresser;
 import com.capillary.zipper.utils.*;
 import com.capillary.zipper.wordbasedhuffman.compression.WordBasedHuffmanCompresser;
 import com.capillary.zipper.wordbasedhuffman.decompression.WordBasedHuffmanDecompresser;
+import com.capillary.zipper.wordbasedhuffman.huffmanutils.Checksum;
 import com.capillary.zipper.wordbasedhuffman.huffmanutils.SimulatedAnnealing;
 import com.capillary.zipper.zipper.IZipperApp;
+
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class WordHuffmanZipperApp implements IZipperApp {
 
     private  IHuffmanCompresser huffmanCompresser;
     private  IHuffmanDecompresser huffmanDecompresser;
     private  SimulatedAnnealing simulatedAnnealing;
+    private Checksum checksum;
+
 
     public WordHuffmanZipperApp(){
         huffmanCompresser=new WordBasedHuffmanCompresser();
         huffmanDecompresser=new WordBasedHuffmanDecompresser();
         simulatedAnnealing=new SimulatedAnnealing();
+        checksum=new Checksum();
     }
 
-    public WordHuffmanZipperApp(IHuffmanCompresser huffmanCompresser,IHuffmanDecompresser huffmanDecompresser,SimulatedAnnealing simulatedAnnealing){
+    public WordHuffmanZipperApp(IHuffmanCompresser huffmanCompresser,IHuffmanDecompresser huffmanDecompresser,SimulatedAnnealing simulatedAnnealing,Checksum checksum){
         this.huffmanCompresser=huffmanCompresser;
         this.huffmanDecompresser=huffmanDecompresser;
         this.simulatedAnnealing=simulatedAnnealing;
+        this.checksum=checksum;
     }
 
     @Override
@@ -31,11 +39,13 @@ public class WordHuffmanZipperApp implements IZipperApp {
         try {
         IZipperStats zipperStats=new FileZipperStats();
 
+      byte[] checkSum=checksum.calcCheckSum(new ByteInputStream(fileHandler.getInputStream()));
+
             zipperStats.startTimer();
             IHashMap frequencyMap=huffmanCompresser.calculateCharacterFrequency(fileHandler.getInputStream());
             zipperStats.stopTimer();
             zipperStats.displayTimeTaken("calculateCharacterFrequency()");
-            zipperStats.displayNewLine();
+
 
             zipperStats.startTimer();
             frequencyMap= simulatedAnnealing.calculateIdealSplit(frequencyMap);
@@ -51,12 +61,16 @@ public class WordHuffmanZipperApp implements IZipperApp {
             IHashMap hashMap= huffmanCompresser.generatePrefixCode(rootNode);
             zipperStats.stopTimer();
             zipperStats.displayTimeTaken("generatePrefixCode()");
-            zipperStats.displayNewLine();
+
 
             zipperStats.calculateAverageCodeLength(frequencyMap,hashMap);
 
+            OutputStream outputStream=fileHandler.getOutputStream();
+
+            checksum.writeFileCheckSum(checkSum,outputStream);
+
             zipperStats.startTimer();
-            huffmanCompresser.encodeFile(fileHandler.getInputStream(),fileHandler.getOutputStream(),hashMap, rootNode);
+            huffmanCompresser.encodeFile(fileHandler.getInputStream(),outputStream,hashMap, rootNode);
             zipperStats.stopTimer();
             zipperStats.displayTimeTaken("encodeFile()");
 
@@ -69,11 +83,14 @@ public class WordHuffmanZipperApp implements IZipperApp {
     @Override
     public void decompress(IFileHandler fileHandler) {
         try {
-
             IZipperStats zipperStats=new FileZipperStats();
 
             zipperStats.startTimer();
-            Node rootNode=(Node)huffmanDecompresser.createHuffmanTree(fileHandler.getInputStream());
+
+            InputStream inputStream=fileHandler.getInputStream();
+            byte[] inputFileCheckSum=checksum.readFileCheckSum(inputStream);
+
+            Node rootNode=(Node)huffmanDecompresser.createHuffmanTree(inputStream);
             zipperStats.stopTimer();
             zipperStats.displayTimeTaken("createHuffmanTree()");
 
@@ -81,6 +98,9 @@ public class WordHuffmanZipperApp implements IZipperApp {
             huffmanDecompresser.decodeFile(fileHandler.getOutputStream(),rootNode);
             zipperStats.stopTimer();
             zipperStats.displayTimeTaken("decodeFile()");
+
+            byte[] outputFileCheckSum=checksum.calcCheckSum(new ByteInputStream(fileHandler.getInputStreamOfOutputFile()));
+           checksum.validateCheckSum(inputFileCheckSum,outputFileCheckSum);
 
         }
         catch (Exception e){

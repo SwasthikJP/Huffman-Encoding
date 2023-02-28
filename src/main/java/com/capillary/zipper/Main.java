@@ -1,73 +1,90 @@
 package com.capillary.zipper;
-import com.capillary.zipper.characterbasedhuffman.huffmanutils.FileHandlerImplementation;
+import com.capillary.zipper.utils.FileHandlerImplementation;
 import com.capillary.zipper.characterbasedhuffman.CharacterHuffmanZipperApp;
 import com.capillary.zipper.utils.FileZipperStats;
 import com.capillary.zipper.utils.IFileHandler;
 import com.capillary.zipper.utils.IZipperStats;
+import com.capillary.zipper.wordbasedhuffman.WordHuffmanZipperApp;
 import com.capillary.zipper.zipper.IZipperApp;
 
-import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.nio.file.FileAlreadyExistsException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main {
+    private static Logger LOGGER = Logger.getLogger(Main.class.getName());
+    static {
+        System.setProperty("java.util.logging.SimpleFormatter.format",
+                "[%1$tF %1$tT.%1$tL] [%4$-7s] %5$s %n");
+        LOGGER = Logger.getLogger(Main.class.getName());
 
-    public static void main(String[] args) {
+    }
 
-        int choice;
-        Scanner scanner = new Scanner(System.in);
-        IZipperApp iApp = new CharacterHuffmanZipperApp();
-        String filePath;
+        public static void main(String[] args) throws FileNotFoundException, FileAlreadyExistsException {
+            long start = System.currentTimeMillis();
+            LOGGER.setLevel(Level.CONFIG);
+            Runtime runtime = Runtime.getRuntime();
 
-        while (true) {
-            System.out.println("1.Compress a file\n2.Decompress a file\n3.Exit");
-            System.out.println("Enter your choice: ");
 
-            choice = scanner.nextInt();
-            IZipperStats compressionStats = new FileZipperStats();
-            switch (choice) {
-                case 1:
+            //check if minimum number of arguments are available for the program
+            if (args.length < 4) {
+                System.err.println("Usage: java main  -option input_file output_file");
+                System.exit(1);
+                return;
+            }
 
-                    System.out.println("Enter the file path for compression");
-                    filePath = scanner.next();
-                    String[] filePathSplit=filePath.split("\\.(?=[^\\.]+$)");
-                    String compressFilePath=filePathSplit[0]+".huf.txt";
-
+            File ipFile = new File(args[args.length - 2]);
+            File opFile = new File(args[args.length - 1]);
+            if (!ipFile.exists()) throw new FileNotFoundException("ERROR: File Not Found");
+            if (opFile.exists()) throw new FileAlreadyExistsException("ERROR: File Already Exists");
+            LOGGER.log(Level.INFO, "File Check Completed. Execution Started");
+            if (args[1].equals("-s") || args[1].equals("--static")) {
+                IZipperApp iApp = new CharacterHuffmanZipperApp();
+                IZipperStats compressionStats = new FileZipperStats();
+                if ((args[0].equals("-c") || args[0].equals("--compress")) &&
+                        (args[1].equals("-s") || args[1].equals("--static"))) {
                     compressionStats.startTimer();
-                    IFileHandler fileHandler=new FileHandlerImplementation(filePath,compressFilePath);
+                    IFileHandler fileHandler = new FileHandlerImplementation(ipFile.getPath(), opFile.getPath());
                     iApp.compress(fileHandler);
                     compressionStats.stopTimer();
-                    compressionStats.displayCompressionStats(filePath, compressFilePath);
-                    break;
-
-                case 2:
-                    System.out.println("Enter the file path for decompression");
-                    filePath = scanner.next();
-                    filePathSplit=filePath.split("\\.(?![^\\.]+$)");
-                    String decompressFilePath=filePathSplit[0]+ ".unhuf"+".txt";
-
-
+                    compressionStats.displayCompressionStats(ipFile.getPath(), opFile.getPath());
+                } else if (args[0].equals("-d") || args[0].equals("--decompress")) {
                     compressionStats.startTimer();
-                    IFileHandler iFileHandler = new FileHandlerImplementation(filePath,decompressFilePath);
+                    IFileHandler iFileHandler = new FileHandlerImplementation(ipFile.getPath(), opFile.getPath());
                     iApp.decompress(iFileHandler);
 
                     compressionStats.stopTimer();
-
-                    break;
-
-                case 3:
-                    break;
-
-                default:
-                    System.out.println("Invalid Input");
-                    break;
+                    compressionStats.displayTimeTaken("Decompression");
+                }
             }
-            if (choice == 3) {
-                break;
+
+
+            if ((args[1].equals("-w") || args[1].equals("--word"))) {
+                IZipperStats compressionStats = new FileZipperStats();
+                IZipperApp zipperApp = new WordHuffmanZipperApp();
+                if ((args[0].equals("-c") || args[0].equals("--compress"))) {
+                    IFileHandler fileHandler = new FileHandlerImplementation(ipFile.getPath(), opFile.getPath());
+
+//        IFileHandler fileHandler=new FileHandlerImplementation("test.txt","test.huf.txt");
+                    compressionStats.startTimer();
+                    zipperApp.compress(fileHandler);
+                    compressionStats.stopTimer();
+                    compressionStats.displayCompressionStats(ipFile.getPath(),opFile.getPath());
+                } else if (args[0].equals("-d") || args[0].equals("--decompress")) {
+                    IFileHandler fileHandler2 = new FileHandlerImplementation(ipFile.getPath(), opFile.getPath());
+
+//        IFileHandler fileHandler2=new FileHandlerImplementation("test.huf.txt","test.unhuf.txt");
+                    compressionStats.startTimer();
+                    zipperApp.decompress(fileHandler2);
+                    compressionStats.stopTimer();
+                    compressionStats.displayTimeTaken("decompression");
+                }
+
             }
+
+            LOGGER.log(Level.INFO, "Process Completed. Execution Stopped");
 
         }
-
-//        IZipperApp zipperApp=new HuffmanZipperApp();
-//        zipperApp.compress("tt.txt");
-
-    }
 }

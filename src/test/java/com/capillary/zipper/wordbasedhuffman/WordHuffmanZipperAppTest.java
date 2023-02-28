@@ -3,10 +3,12 @@ package com.capillary.zipper.wordbasedhuffman;
 import com.capillary.zipper.characterbasedhuffman.huffmanutils.TestFileHandlerImplementation;
 import com.capillary.zipper.commonhuffmaninterfaces.IHuffmanCompresser;
 import com.capillary.zipper.commonhuffmaninterfaces.IHuffmanDecompresser;
+import com.capillary.zipper.utils.ByteInputStream;
 import com.capillary.zipper.utils.IHashMap;
 import com.capillary.zipper.utils.Node;
 import com.capillary.zipper.wordbasedhuffman.compression.WordBasedHuffmanCompresser;
 import com.capillary.zipper.wordbasedhuffman.decompression.WordBasedHuffmanDecompresser;
+import com.capillary.zipper.wordbasedhuffman.huffmanutils.Checksum;
 import com.capillary.zipper.wordbasedhuffman.huffmanutils.HashMapImpl;
 import com.capillary.zipper.wordbasedhuffman.huffmanutils.SimulatedAnnealing;
 import com.capillary.zipper.zipper.IZipperApp;
@@ -37,9 +39,13 @@ public class WordHuffmanZipperAppTest {
         SimulatedAnnealing simulatedAnnealing=spy(SimulatedAnnealing.class);
         doReturn(new HashMapImpl()).when(simulatedAnnealing).calculateIdealSplit(any(IHashMap.class));
 
+        Checksum checksum=spy(Checksum.class);
+        doReturn(new byte[16]).when(checksum).calcCheckSum(any(ByteInputStream.class));
+        doNothing().when(checksum).writeFileCheckSum(a,any(OutputStream.class));
+
 
         IHuffmanDecompresser huffmanDecompresser=spy(WordBasedHuffmanDecompresser.class);
-        zipperApp=new WordHuffmanZipperApp(huffmanCompresser,huffmanDecompresser,simulatedAnnealing);
+        zipperApp=new WordHuffmanZipperApp(huffmanCompresser,huffmanDecompresser,simulatedAnnealing,checksum);
         byte[] content={};
         TestFileHandlerImplementation fileHandler= new TestFileHandlerImplementation(content);
         zipperApp.compress(fileHandler);
@@ -58,7 +64,11 @@ public class WordHuffmanZipperAppTest {
 
         SimulatedAnnealing simulatedAnnealing=spy(SimulatedAnnealing.class);
 
-        zipperApp=new WordHuffmanZipperApp(huffmanCompresser,huffmanDecompresser,simulatedAnnealing);
+        Checksum checksum=spy(Checksum.class);
+        doReturn(new byte[16]).when(checksum).calcCheckSum(any(ByteInputStream.class));
+        doReturn(new byte[16]).when(checksum).readFileCheckSum(any(InputStream.class));
+
+        zipperApp=new WordHuffmanZipperApp(huffmanCompresser,huffmanDecompresser,simulatedAnnealing,checksum);
         byte[] content={};
         TestFileHandlerImplementation fileHandler= new TestFileHandlerImplementation(content);
          zipperApp.decompress(fileHandler);

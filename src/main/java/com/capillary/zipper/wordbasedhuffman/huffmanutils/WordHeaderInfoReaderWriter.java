@@ -23,6 +23,7 @@ public class WordHeaderInfoReaderWriter implements IHeaderInfoReaderWriter {
         for(int i=0;i<wordLength;i++){
             word=word+(char) byteInputStream.getBits(8);
         }
+
         return new Node(word, 0);
     }
 

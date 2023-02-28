@@ -24,6 +24,11 @@ public class TestFileHandlerImplementation implements IFileHandler {
         return outputStream;
     }
 
+    @Override
+    public InputStream getInputStreamOfOutputFile() throws IOException {
+        return null;
+    }
+
     public byte[] getOutputByteArray(){
         return  outputStream.toByteArray();
     }

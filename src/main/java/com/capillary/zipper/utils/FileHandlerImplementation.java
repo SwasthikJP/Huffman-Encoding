@@ -1,4 +1,4 @@
-package com.capillary.zipper.characterbasedhuffman.huffmanutils;
+package com.capillary.zipper.utils;
 
 import com.capillary.zipper.utils.IFileHandler;
 
@@ -21,6 +21,11 @@ public class FileHandlerImplementation implements IFileHandler {
     @Override
     public OutputStream getOutputStream()throws IOException {
         return new FileOutputStream(outputFilePath);
+    }
+
+    @Override
+    public InputStream getInputStreamOfOutputFile() throws IOException {
+        return new FileInputStream(outputFilePath);
     }
 
 }

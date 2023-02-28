@@ -1,6 +1,6 @@
 package com.capillary.zipper.wordbasedhuffman;
 
-import com.capillary.zipper.characterbasedhuffman.huffmanutils.FileHandlerImplementation;
+import com.capillary.zipper.utils.FileHandlerImplementation;
 import com.capillary.zipper.utils.FileZipperStats;
 import com.capillary.zipper.utils.IFileHandler;
 import com.capillary.zipper.utils.IZipperStats;

@@ -7,4 +7,5 @@ import java.io.OutputStream;
 public interface IFileHandler {
     public InputStream getInputStream() throws IOException;
     public OutputStream getOutputStream() throws IOException;
+    InputStream getInputStreamOfOutputFile() throws IOException;
 }
