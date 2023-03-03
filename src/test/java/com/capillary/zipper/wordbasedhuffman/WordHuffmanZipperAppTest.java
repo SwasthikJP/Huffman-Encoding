@@ -16,6 +16,8 @@ import org.junit.Test;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -40,8 +42,8 @@ public class WordHuffmanZipperAppTest {
         doReturn(new HashMapImpl()).when(simulatedAnnealing).calculateIdealSplit(any(IHashMap.class));
 
         Checksum checksum=spy(Checksum.class);
-        doReturn(new byte[16]).when(checksum).calcCheckSum(any(ByteInputStream.class));
-        doNothing().when(checksum).writeFileCheckSum(a,any(OutputStream.class));
+        doReturn(new ArrayList<>()).when(checksum).calcCheckSum(any(ByteInputStream.class));
+        doNothing().when(checksum).writeCheckSum(anyList(),any(OutputStream.class));
 
 
         IHuffmanDecompresser huffmanDecompresser=spy(WordBasedHuffmanDecompresser.class);
@@ -65,8 +67,8 @@ public class WordHuffmanZipperAppTest {
         SimulatedAnnealing simulatedAnnealing=spy(SimulatedAnnealing.class);
 
         Checksum checksum=spy(Checksum.class);
-        doReturn(new byte[16]).when(checksum).calcCheckSum(any(ByteInputStream.class));
-        doReturn(new byte[16]).when(checksum).readFileCheckSum(any(InputStream.class));
+        doReturn(new ArrayList<>()).when(checksum).calcCheckSum(any(ByteInputStream.class));
+        doReturn(new ArrayList<>()).when(checksum).readCheckSum(any(InputStream.class));
 
         zipperApp=new WordHuffmanZipperApp(huffmanCompresser,huffmanDecompresser,simulatedAnnealing,checksum);
         byte[] content={};

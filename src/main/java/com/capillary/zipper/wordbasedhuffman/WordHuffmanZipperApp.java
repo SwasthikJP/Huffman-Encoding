@@ -11,6 +11,7 @@ import com.capillary.zipper.zipper.IZipperApp;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 public class WordHuffmanZipperApp implements IZipperApp {
 
@@ -37,9 +38,10 @@ public class WordHuffmanZipperApp implements IZipperApp {
     @Override
     public void compress(IFileHandler fileHandler) {
         try {
-        IZipperStats zipperStats=new FileZipperStats();
-
-      byte[] checkSum=checksum.calcCheckSum(new ByteInputStream(fileHandler.getInputStream()));
+            IZipperStats zipperStats=new FileZipperStats();
+            IZipperStats zipperStats2=new FileZipperStats();
+           zipperStats2.startTimer();
+      List checkSum=checksum.calcCheckSum(new ByteInputStream(fileHandler.getInputStream()));
 
             zipperStats.startTimer();
             IHashMap frequencyMap=huffmanCompresser.calculateCharacterFrequency(fileHandler.getInputStream());
@@ -67,13 +69,14 @@ public class WordHuffmanZipperApp implements IZipperApp {
 
             OutputStream outputStream=fileHandler.getOutputStream();
 
-            checksum.writeFileCheckSum(checkSum,outputStream);
+            checksum.writeCheckSum(checkSum,outputStream);
 
             zipperStats.startTimer();
             huffmanCompresser.encodeFile(fileHandler.getInputStream(),outputStream,hashMap, rootNode);
             zipperStats.stopTimer();
             zipperStats.displayTimeTaken("encodeFile()");
-
+            zipperStats2.stopTimer();
+            zipperStats2.displayTimeTaken("Compression");
         }
         catch (Exception e){
             e.printStackTrace();
@@ -84,11 +87,10 @@ public class WordHuffmanZipperApp implements IZipperApp {
     public void decompress(IFileHandler fileHandler) {
         try {
             IZipperStats zipperStats=new FileZipperStats();
-
             zipperStats.startTimer();
 
             InputStream inputStream=fileHandler.getInputStream();
-            byte[] inputFileCheckSum=checksum.readFileCheckSum(inputStream);
+            List inputFileCheckSum=checksum.readCheckSum(inputStream);
 
             Node rootNode=(Node)huffmanDecompresser.createHuffmanTree(inputStream);
             zipperStats.stopTimer();
@@ -99,7 +101,7 @@ public class WordHuffmanZipperApp implements IZipperApp {
             zipperStats.stopTimer();
             zipperStats.displayTimeTaken("decodeFile()");
 
-            byte[] outputFileCheckSum=checksum.calcCheckSum(new ByteInputStream(fileHandler.getInputStreamOfOutputFile()));
+            List outputFileCheckSum=checksum.calcCheckSum(new ByteInputStream(fileHandler.getInputStreamOfOutputFile()));
            checksum.validateCheckSum(inputFileCheckSum,outputFileCheckSum);
 
         }

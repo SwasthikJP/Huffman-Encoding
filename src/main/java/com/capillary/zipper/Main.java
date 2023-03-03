@@ -72,6 +72,7 @@ public class Main {
                     zipperApp.compress(fileHandler);
                     compressionStats.stopTimer();
                     compressionStats.displayCompressionStats(ipFile.getPath(),opFile.getPath());
+                    compressionStats.displayTimeTaken("compression");
                 } else if (args[0].equals("-d") || args[0].equals("--decompress")) {
                     IFileHandler fileHandler2 = new FileHandlerImplementation(ipFile.getPath(), opFile.getPath());
 

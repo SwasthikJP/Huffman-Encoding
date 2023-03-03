@@ -9,6 +9,13 @@ public class Node {
    public Node(){}
 
 
+    public Node(Object value,boolean isLeafNode){
+       this.value=value;
+       this.isLeafNode=isLeafNode;
+    }
+
+
+
     public Node(Object value, int frequency) {
         this.value = value;
         this.frequency = frequency;

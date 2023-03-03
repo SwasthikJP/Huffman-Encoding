@@ -45,7 +45,6 @@ public class CharacterBasedHuffmanDecompresser implements IHuffmanDecompresser {
     @Override
     public Boolean decodeFile( java.io.OutputStream fileOutputStream, Object rootNode) throws IOException{
 
-
         if (byteInputStream == null || rootNode==null) {
             return false;
         }
