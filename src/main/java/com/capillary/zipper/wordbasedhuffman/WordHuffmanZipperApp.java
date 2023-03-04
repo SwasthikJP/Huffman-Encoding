@@ -4,14 +4,17 @@ import com.capillary.zipper.commonhuffmaninterfaces.IHuffmanCompresser;
 import com.capillary.zipper.commonhuffmaninterfaces.IHuffmanDecompresser;
 import com.capillary.zipper.utils.*;
 import com.capillary.zipper.wordbasedhuffman.compression.WordBasedHuffmanCompresser;
+import com.capillary.zipper.wordbasedhuffman.database.SqliteDao;
 import com.capillary.zipper.wordbasedhuffman.decompression.WordBasedHuffmanDecompresser;
 import com.capillary.zipper.wordbasedhuffman.huffmanutils.Checksum;
+import com.capillary.zipper.wordbasedhuffman.huffmanutils.HashMapImpl;
 import com.capillary.zipper.wordbasedhuffman.huffmanutils.SimulatedAnnealing;
 import com.capillary.zipper.zipper.IZipperApp;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Map;
 
 public class WordHuffmanZipperApp implements IZipperApp {
 
@@ -75,6 +78,12 @@ public class WordHuffmanZipperApp implements IZipperApp {
             huffmanCompresser.encodeFile(fileHandler.getInputStream(),outputStream,hashMap, rootNode);
             zipperStats.stopTimer();
             zipperStats.displayTimeTaken("encodeFile()");
+
+            SqliteDao sqliteDao=new SqliteDao();
+
+            sqliteDao.createTable();
+            sqliteDao.insert((Map<Object, Object>) frequencyMap.getMap(), checksum.getcheckSum(checkSum));
+
             zipperStats2.stopTimer();
             zipperStats2.displayTimeTaken("Compression");
         }
@@ -95,6 +104,18 @@ public class WordHuffmanZipperApp implements IZipperApp {
             Node rootNode=(Node)huffmanDecompresser.createHuffmanTree(inputStream);
             zipperStats.stopTimer();
             zipperStats.displayTimeTaken("createHuffmanTree()");
+
+
+            SqliteDao sqliteDao=new SqliteDao();
+
+            sqliteDao.createTable();
+            if(sqliteDao.get(checksum.getcheckSum(inputFileCheckSum))==null){
+                throw new Exception("Header not found");
+            }else{
+                Map<Object,Object> map=sqliteDao.get(checksum.getcheckSum(inputFileCheckSum));
+                IHashMap hashMap=new HashMapImpl(map);
+                rootNode=huffmanCompresser.createHuffmanTree(hashMap);
+            }
 
             zipperStats.startTimer();
             huffmanDecompresser.decodeFile(fileHandler.getOutputStream(),rootNode);

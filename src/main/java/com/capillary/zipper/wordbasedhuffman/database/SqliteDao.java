@@ -1,13 +1,17 @@
 package com.capillary.zipper.wordbasedhuffman.database;
 
+
 import com.capillary.zipper.utils.Node;
 
 import javax.print.DocFlavor;
+import java.io.*;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class SqliteDao implements IDao<Node> {
+public class SqliteDao implements IDao<Map<Object,Object>> {
     private  IDBOperation dbOperation;
 
     public SqliteDao() throws Exception {
@@ -16,46 +20,64 @@ public class SqliteDao implements IDao<Node> {
     }
 
     @Override
-    public Node get(long id) {
-        return null;
-    }
+    public Map<Object,Object> get(String checkSum) throws Exception{
+        ResultSet rs=(ResultSet)   dbOperation.executeQuery( "SELECT * FROM FREQMAP WHERE CHECKSUM = '"+checkSum+"';" ,"select",null);
 
-
-
-    @Override
-    public List getAll() throws Exception {
-        ResultSet rs=(ResultSet)   dbOperation.executeQuery( "SELECT * FROM TREE;" ,"select");
-
-        List<Node> list=new ArrayList<>();
+//        List<Node> list=new ArrayList<>();
+        Map<Object,Object> map=null;
         while(rs.next()){
-            list.add(new Node(rs.getString("HASH"),rs.getBoolean("ISLEAF")));
+           System.out.println(rs.getString("CHECKSUM"));
+            InputStream inputStream=rs.getBinaryStream("MAP");
+            ObjectInputStream objectInputStream=new ObjectInputStream(inputStream);
+            map=(Map<Object, Object>) objectInputStream.readObject();
         }
         rs.close();
-        return list;
+        if(map==null)
+            return new HashMap<>();
+        return map;
     }
 
     @Override
-    public void insert(Node item) throws Exception {
-        dbOperation.executeQuery("INSERT INTO TREE (HASH,ISLEAF) " +
-               "VALUES ('1001',TRUE);","insert");
+    public void insert(Map<Object,Object> hashMap,String checkSum) throws Exception {
+
+        ByteArrayOutputStream bObj = new ByteArrayOutputStream();
+        ObjectOutputStream out;
+        try {
+            out = new ObjectOutputStream(bObj);
+            if(hashMap != null){
+                out.writeObject(hashMap);
+                out.close();
+                bObj.close();
+                byte[] byteOut = bObj.toByteArray();
+                System.out.println(byteOut.length);
+
+                String query = "INSERT INTO FREQMAP (CHECKSUM,MAP) "
+                        + "VALUES ( '"+checkSum+"' ,?);";
+
+                dbOperation.executeQuery(query,"insert",byteOut);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     @Override
-    public void update(Node item, Object[] params) {
+    public void update(Map<Object,Object> hashMap,String checkSum) {
 
     }
 
     @Override
-    public void delete(Node treeNode) {
+    public void delete(String checkSum) {
 
     }
 
     @Override
     public void createTable() throws Exception {
-    dbOperation.executeQuery( "CREATE TABLE TREE " +
-            "(ID INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "HASH CHAR(50) NOT NULL," +
-            " ISLEAF  BOOLEAN   NOT NULL )","create" );
+    dbOperation.executeQuery( "CREATE TABLE IF NOT EXISTS FREQMAP " +
+            "(CHECKSUM CHAR(20) PRIMARY KEY NOT NULL," +
+            "MAP BLOB NOT NULL)","create" ,null);
     }
 
 

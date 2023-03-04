@@ -72,4 +72,13 @@ public class Checksum {
                 return false;
             }
     }
+
+    public <T> String getcheckSum(List<T> list){
+        String checkSum="";
+        for(T b:list){
+            checkSum=checkSum+Integer.toString(((byte)b & 0xff),16) + 0x100;
+        }
+        System.out.println(checkSum);
+        return checkSum;
+    }
 }

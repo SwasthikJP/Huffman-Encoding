@@ -1,13 +1,10 @@
 package com.capillary.zipper.wordbasedhuffman.database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 public class SqliteDBOperation implements IDBOperation {
     private Connection connection;
-    private Statement stmt;
+    private PreparedStatement stmt;
 
     @Override
     public void createConnection() {
@@ -22,21 +19,25 @@ public class SqliteDBOperation implements IDBOperation {
     }
 
     @Override
-    public Object executeQuery(String query, String operation)throws Exception {
-     stmt = connection.createStatement();
+    public Object executeQuery(String query, String operation,Object blob)throws Exception {
+
      Object object=null;
      switch (operation){
          case "select":
-           stmt.close();
-            object=stmt.executeQuery(query);
+        stmt = connection.prepareStatement(query);
+            object=stmt.executeQuery();
             break;
 
          case "insert":
-           System.out.println( stmt.executeUpdate(query));
+             stmt=connection.prepareStatement(query);
+             stmt.setBytes(1,(byte[]) blob);
+           System.out.println( stmt.executeUpdate());
+           break;
 
          case "create":
-             object=stmt.executeUpdate(query);
-
+             stmt = connection.prepareStatement(query);
+             object=stmt.executeUpdate();
+             break;
          default:
 
      }
