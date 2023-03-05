@@ -260,35 +260,35 @@ public class WordBasedHuffmanCompresserTest {
 
 
 
-@Test
-    public void encodeFile_WhenIHeaderReaderWriterReturnsFalse_ThenThrowException() throws Exception {
-        expectedException.expect(IOException.class);
-        expectedException.expectMessage("Invalid huffman tree");
-
-
-        String fileInput="aB 1/a";
-        InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
-                (Charset.forName("UTF-8")));
-
-
-    Node rootNode=new Node("",0);
-
-        IHashMap hashMap=new HashMapImpl();
-
-    ByteArrayOutputStream outputStream=new ByteArrayOutputStream(1);
-
-        IHeaderInfoReaderWriter headerInfoReaderWriter= spy(IHeaderInfoReaderWriter.class);
-       doReturn(false).when(headerInfoReaderWriter).writeHeaderInfo(any(Node.class),any(ByteOutputStream.class));
-
-
-            ICompressedFileReaderWriter compressedFileReaderWriter = spy(ICompressedFileReaderWriter.class);
-         doReturn(true).when(compressedFileReaderWriter).writeCompressedFile(any(ByteInputStream.class),any(ByteOutputStream.class),any(IHashMap.class));
-
-    IHuffmanCompresser huffmanCompresser = new WordBasedHuffmanCompresser(headerInfoReaderWriter,compressedFileReaderWriter);
-
-       huffmanCompresser.encodeFile(inputStream,outputStream,hashMap,rootNode);
-
-    }
+//@Test
+//    public void encodeFile_WhenIHeaderReaderWriterReturnsFalse_ThenThrowException() throws Exception {
+//        expectedException.expect(IOException.class);
+//        expectedException.expectMessage("Invalid huffman tree");
+//
+//
+//        String fileInput="aB 1/a";
+//        InputStream inputStream = new ByteArrayInputStream(fileInput.getBytes
+//                (Charset.forName("UTF-8")));
+//
+//
+//    Node rootNode=new Node("",0);
+//
+//        IHashMap hashMap=new HashMapImpl();
+//
+//    ByteArrayOutputStream outputStream=new ByteArrayOutputStream(1);
+//
+//        IHeaderInfoReaderWriter headerInfoReaderWriter= spy(IHeaderInfoReaderWriter.class);
+//       doReturn(false).when(headerInfoReaderWriter).writeHeaderInfo(any(Node.class),any(ByteOutputStream.class));
+//
+//
+//            ICompressedFileReaderWriter compressedFileReaderWriter = spy(ICompressedFileReaderWriter.class);
+//         doReturn(true).when(compressedFileReaderWriter).writeCompressedFile(any(ByteInputStream.class),any(ByteOutputStream.class),any(IHashMap.class));
+//
+//    IHuffmanCompresser huffmanCompresser = new WordBasedHuffmanCompresser(headerInfoReaderWriter,compressedFileReaderWriter);
+//
+//       huffmanCompresser.encodeFile(inputStream,outputStream,hashMap,rootNode);
+//
+//    }
 
 @PrepareForTest(WordBasedHuffmanCompresser.class)
     @Test

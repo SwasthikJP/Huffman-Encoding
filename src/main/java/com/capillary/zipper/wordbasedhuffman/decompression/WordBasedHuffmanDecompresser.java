@@ -36,6 +36,12 @@ public class WordBasedHuffmanDecompresser implements IHuffmanDecompresser {
         this.compressedFileReaderWriter=compressedFileReaderWriter;
     }
 
+    public WordBasedHuffmanDecompresser(InputStream inputStream)throws IOException{
+        this.byteInputStream=new ByteInputStream(inputStream);
+        headerInfoReaderWriter=new WordHeaderInfoReaderWriter();
+        compressedFileReaderWriter=new CompressedWordFileReaderWriterImpl();
+    }
+
 
     @Override
     public Object createHuffmanTree(InputStream fileInputStream) throws IOException {

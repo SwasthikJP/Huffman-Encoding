@@ -18,6 +18,18 @@
     <orderEntry type="library" name="Maven: net.bytebuddy:byte-buddy:1.11.19" level="project" />
     <orderEntry type="library" name="Maven: net.bytebuddy:byte-buddy-agent:1.11.19" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.objenesis:objenesis:3.2" level="project" />
+    <orderEntry type="library" name="Maven: net.oneandone.mockrunner:mockrunner-jms:3.0.1" level="project" />
+    <orderEntry type="library" name="Maven: net.oneandone.mockrunner:mockrunner-core:3.0.1" level="project" />
+    <orderEntry type="library" name="Maven: jdom:jdom:1.0" level="project" />
+    <orderEntry type="library" name="Maven: oro:oro:2.0.8" level="project" />
+    <orderEntry type="library" name="Maven: com.kirkk:jaranalyzer:1.2" level="project" />
+    <orderEntry type="library" name="Maven: bcel:bcel:5.1" level="project" />
+    <orderEntry type="library" name="Maven: regexp:regexp:1.2" level="project" />
+    <orderEntry type="library" name="Maven: jakarta-regexp:jakarta-regexp:1.4" level="project" />
+    <orderEntry type="library" name="Maven: ant:ant:1.6.5" level="project" />
+    <orderEntry type="library" name="Maven: nekohtml:nekohtml:0.9.5" level="project" />
+    <orderEntry type="library" name="Maven: xerces:xercesImpl:2.4.0" level="project" />
+    <orderEntry type="library" name="Maven: jakarta.jms:jakarta.jms-api:3.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.mockito:mockito-junit-jupiter:4.0.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-api:5.8.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.opentest4j:opentest4j:1.2.0" level="project" />

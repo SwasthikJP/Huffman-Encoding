@@ -22,40 +22,53 @@ public class WordHuffmanZipperApp implements IZipperApp {
     private  IHuffmanDecompresser huffmanDecompresser;
     private  SimulatedAnnealing simulatedAnnealing;
     private Checksum checksum;
+    private SqliteDao sqliteDao;
 
 
-    public WordHuffmanZipperApp(){
+    public WordHuffmanZipperApp() throws Exception{
         huffmanCompresser=new WordBasedHuffmanCompresser();
         huffmanDecompresser=new WordBasedHuffmanDecompresser();
         simulatedAnnealing=new SimulatedAnnealing();
         checksum=new Checksum();
+        sqliteDao=new SqliteDao();
     }
 
-    public WordHuffmanZipperApp(IHuffmanCompresser huffmanCompresser,IHuffmanDecompresser huffmanDecompresser,SimulatedAnnealing simulatedAnnealing,Checksum checksum){
+    public WordHuffmanZipperApp(IHuffmanCompresser huffmanCompresser,IHuffmanDecompresser huffmanDecompresser,SimulatedAnnealing simulatedAnnealing,Checksum checksum,SqliteDao sqliteDao){
         this.huffmanCompresser=huffmanCompresser;
         this.huffmanDecompresser=huffmanDecompresser;
         this.simulatedAnnealing=simulatedAnnealing;
         this.checksum=checksum;
+        this.sqliteDao=sqliteDao;
     }
 
     @Override
     public void compress(IFileHandler fileHandler) {
         try {
             IZipperStats zipperStats=new FileZipperStats();
-            IZipperStats zipperStats2=new FileZipperStats();
-           zipperStats2.startTimer();
+
       List checkSum=checksum.calcCheckSum(new ByteInputStream(fileHandler.getInputStream()));
 
-            zipperStats.startTimer();
-            IHashMap frequencyMap=huffmanCompresser.calculateCharacterFrequency(fileHandler.getInputStream());
-            zipperStats.stopTimer();
-            zipperStats.displayTimeTaken("calculateCharacterFrequency()");
+
+            sqliteDao.createTable();
+            Map<Object,Object> map=null;
+            IHashMap frequencyMap=null;
+            Boolean freqMapPresent=false;
+            if( (map=sqliteDao.get(checksum.getcheckSum(checkSum))).size()!=0){
+                freqMapPresent=true;
+                 frequencyMap=new HashMapImpl(map);
+            }else {
+                zipperStats.startTimer();
+               frequencyMap = huffmanCompresser.calculateCharacterFrequency(fileHandler.getInputStream());
+                zipperStats.stopTimer();
+                zipperStats.displayTimeTaken("calculateCharacterFrequency()");
 
 
-            zipperStats.startTimer();
-            frequencyMap= simulatedAnnealing.calculateIdealSplit(frequencyMap);
-            zipperStats.stopTimer();
-            zipperStats.displayTimeTaken("simulatedAnnealing()");
+                zipperStats.startTimer();
+                frequencyMap = simulatedAnnealing.calculateIdealSplit(frequencyMap);
+                zipperStats.stopTimer();
+                zipperStats.displayTimeTaken("simulatedAnnealing()");
+
+            }
 
             zipperStats.startTimer();
             Node rootNode=huffmanCompresser.createHuffmanTree(frequencyMap);
@@ -68,7 +81,7 @@ public class WordHuffmanZipperApp implements IZipperApp {
             zipperStats.displayTimeTaken("generatePrefixCode()");
 
 
-            zipperStats.calculateAverageCodeLength(frequencyMap,hashMap);
+//            zipperStats.calculateAverageCodeLength(frequencyMap,hashMap);
 
             OutputStream outputStream=fileHandler.getOutputStream();
 
@@ -79,13 +92,14 @@ public class WordHuffmanZipperApp implements IZipperApp {
             zipperStats.stopTimer();
             zipperStats.displayTimeTaken("encodeFile()");
 
-            SqliteDao sqliteDao=new SqliteDao();
 
-            sqliteDao.createTable();
-            sqliteDao.insert((Map<Object, Object>) frequencyMap.getMap(), checksum.getcheckSum(checkSum));
-
-            zipperStats2.stopTimer();
-            zipperStats2.displayTimeTaken("Compression");
+            if(!freqMapPresent) {
+                zipperStats.startTimer();
+                sqliteDao.createTable();
+                sqliteDao.insert((Map<Object, Object>) frequencyMap.getMap(), checksum.getcheckSum(checkSum));
+                zipperStats.stopTimer();
+                zipperStats.displayTimeTaken("FreqMap Write to DB ");
+            }
         }
         catch (Exception e){
             e.printStackTrace();
@@ -96,26 +110,31 @@ public class WordHuffmanZipperApp implements IZipperApp {
     public void decompress(IFileHandler fileHandler) {
         try {
             IZipperStats zipperStats=new FileZipperStats();
-            zipperStats.startTimer();
 
+//            zipperStats.startTimer();
+//            huffmanDecompresser.createHuffmanTree(inputStream);
+//            zipperStats.stopTimer();
+//            zipperStats.displayTimeTaken("createHuffmanTree()");
+
+            Node rootNode=null;
             InputStream inputStream=fileHandler.getInputStream();
             List inputFileCheckSum=checksum.readCheckSum(inputStream);
-
-            Node rootNode=(Node)huffmanDecompresser.createHuffmanTree(inputStream);
-            zipperStats.stopTimer();
-            zipperStats.displayTimeTaken("createHuffmanTree()");
+            huffmanDecompresser=new WordBasedHuffmanDecompresser(inputStream);
 
 
-            SqliteDao sqliteDao=new SqliteDao();
+            Map<Object,Object> map=null;
 
             sqliteDao.createTable();
-            if(sqliteDao.get(checksum.getcheckSum(inputFileCheckSum))==null){
-                throw new Exception("Header not found");
-            }else{
-                Map<Object,Object> map=sqliteDao.get(checksum.getcheckSum(inputFileCheckSum));
+            if( (map=sqliteDao.get(checksum.getcheckSum(inputFileCheckSum))).size()!=0){
                 IHashMap hashMap=new HashMapImpl(map);
+                zipperStats.startTimer();
                 rootNode=huffmanCompresser.createHuffmanTree(hashMap);
+                zipperStats.stopTimer();
+                zipperStats.displayTimeTaken("build huffman tree");
+            }else{
+               throw new Exception("header not found");
             }
+
 
             zipperStats.startTimer();
             huffmanDecompresser.decodeFile(fileHandler.getOutputStream(),rootNode);

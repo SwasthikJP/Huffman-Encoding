@@ -7,7 +7,7 @@ import com.capillary.zipper.utils.IZipperStats;
 import com.capillary.zipper.zipper.IZipperApp;
 
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args)throws Exception {
 
         IZipperApp zipperApp=new WordHuffmanZipperApp();
 //        IFileHandler fileHandler=new FileHandlerImplementation("/home/swasthikjp/Downloads/pg100.txt","/home/swasthikjp/Downloads/pg100.huf.txt");

@@ -121,11 +121,11 @@ public class WordBasedHuffmanCompresser implements IHuffmanCompresser {
         ByteOutputStream byteOutputStream = new ByteOutputStream(fileOutputStream);
 
 
-       if(!headerInfoReaderWriter.writeHeaderInfo(rootNode, byteOutputStream)){
-            throw new IOException("Invalid huffman tree");
-        }
+//       if(!headerInfoReaderWriter.writeHeaderInfo(rootNode, byteOutputStream)){
+//            throw new IOException("Invalid huffman tree");
+//        }
         IZipperStats zipperStats=new FileZipperStats();
-        zipperStats.calcHeaderSize(byteOutputStream);
+//        zipperStats.calcHeaderSize(byteOutputStream);
 
 
         if(!compressedFileReaderWriter.writeCompressedFile(byteInputStream, byteOutputStream, hashMap)){

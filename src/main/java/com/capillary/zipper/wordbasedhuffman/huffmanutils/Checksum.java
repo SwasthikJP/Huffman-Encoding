@@ -78,7 +78,7 @@ public class Checksum {
         for(T b:list){
             checkSum=checkSum+Integer.toString(((byte)b & 0xff),16) + 0x100;
         }
-        System.out.println(checkSum);
+
         return checkSum;
     }
 }

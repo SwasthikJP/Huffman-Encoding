@@ -22,7 +22,7 @@ public class Main {
 
     }
 
-        public static void main(String[] args) throws FileNotFoundException, FileAlreadyExistsException {
+        public static void main(String[] args) throws FileNotFoundException, FileAlreadyExistsException, Exception {
             long start = System.currentTimeMillis();
             LOGGER.setLevel(Level.CONFIG);
             Runtime runtime = Runtime.getRuntime();

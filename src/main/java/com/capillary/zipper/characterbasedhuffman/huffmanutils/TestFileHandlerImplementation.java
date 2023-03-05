@@ -26,7 +26,7 @@ public class TestFileHandlerImplementation implements IFileHandler {
 
     @Override
     public InputStream getInputStreamOfOutputFile() throws IOException {
-        return null;
+        return new ByteArrayInputStream(content);
     }
 
     public byte[] getOutputByteArray(){
